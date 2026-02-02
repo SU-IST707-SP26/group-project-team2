@@ -71,5 +71,5 @@ Prior studies use regression and tree-based models but often have limited sample
 
 ## References
 
-[^1]: Machine learning framework for predicting susceptibility to obesity
+- **1** Machine learning framework for predicting susceptibility to obesity
  https://pmc.ncbi.nlm.nih.gov/articles/PMC12508184/
