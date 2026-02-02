@@ -53,11 +53,11 @@ Prior studies use regression and tree-based models but often have limited sample
 
 | Period | Activity | Milestone |
 |--------|---------|----------|
-| 9/10 – 9/23 | Stakeholder analysis, EDA | EDA completed, stakeholders identified |
-| 9/24 – 10/8 | Data cleaning, feature engineering, baseline models | Clean data, baseline performance |
-| 10/9 – 10/23 | Advanced modeling, tuning | Candidate models finalized |
-| 10/24 – 11/6 | Model evaluation, interpretation | Final model validated |
-| 11/7 – 11/20 | Documentation, final report | Submission-ready results |
+| 1/2 – 9/2 | Stakeholder analysis, EDA | EDA completed, stakeholders identified |
+|  – | Data cleaning, feature engineering, baseline models | Clean data, baseline performance |
+|  –  | Advanced modeling, tuning | Candidate models finalized |
+|  – | Model evaluation, interpretation | Final model validated |
+|  –  | Documentation, final report | Submission-ready results |
 
 ---
 
