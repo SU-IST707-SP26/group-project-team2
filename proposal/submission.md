@@ -11,7 +11,8 @@
 ## Introduction
 
 **Goal:**  
-Predict obesity risk using BRFSS 2024 survey data and identify key predictors from demographics, behaviors, and health variables.
+Develop and validate multiple machine learning models for obesity risk prediction using BRFSS 2024 survey data and identify key predictors from demographics, behaviors, and health variables.
+
 
 **Approach:**  
 Apply machine learning models (logistic regression, random forests, gradient boosting) to a large, representative dataset for robust, interpretable predictions.
@@ -38,8 +39,9 @@ Prior studies use regression and tree-based models but often have limited sample
 
 **Dataset:**  
 - **BRFSS 2024** ([CDC link](https://www.cdc.gov/brfss/annual_data/annual_2024.html))  
-- ~400,000+ rows; demographics, behaviors, health conditions  
-- **Target:** Obesity (BMI ≥ 30)  
+- **Number of observations** 457670
+- **Number of variables** 301; demographics, behaviors, health conditions 
+- **Target:** Obesity (BMI ≥ 3000) 
 
 **Methods:**  
 - **Preprocessing:** Handle missing values, encode categories, scale features  
@@ -73,3 +75,11 @@ Prior studies use regression and tree-based models but often have limited sample
 
 - **1** Machine learning framework for predicting susceptibility to obesity
  https://pmc.ncbi.nlm.nih.gov/articles/PMC12508184/
+-**2** https://www.cdc.gov/brfss/annual_data/annual_2024.html
+    General BRFSS Information: https://www.cdc.gov/brfss/index.html
+-**3** Kalhori et al. (2025) - Systematic Review: https://www.sciencedirect.com/science/article/abs/pii/S1386505625000218
+-**4** Recent Obesity Prediction with XAI (2025): https://pmc.ncbi.nlm.nih.gov/articles/PMC12308079/
+    Frontiers in Physiology article on SHAP and LIME for obesity prediction
+-**5** Nature Scientific Reports - ObeRisk Framework (2025): https://www.nature.com/articles/s41598-025-20505-9
+-**6** Helforoush & Sayyad (2024) - Obesity Prediction Comparison: https://www.frontiersin.org/journals/big-data/articles/10.3389/fdata.2024.1469981/full
+-**7** Meta-Analysis on ML for Obesity (2024): https://www.nmcd-journal.com/article/S0939-4753(24)00204-7/abstract
