@@ -11,7 +11,7 @@
 
 **Next Steps:** Team to download BRFSS 2024 data and begin EDA.
 
-## 2026-02-01 - Data Download Started (Team)
+## 2026-02-01 - Data Download Started (Lulu)
 **Context:** Acquiring BRFSS 2024 dataset for analysis.
 
 **Solution Implemented:**
