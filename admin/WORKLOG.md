@@ -25,20 +25,25 @@
 
 2026-02-05 - Milestone 1: Data Acquisition & Understanding (Quispe)
 
-Context: Focused on reviewing health condition variables in BRFSS 2024, defining obesity target, and cross-checking predictors for completeness.
+Context:
+- BRFSS 2024 codebook unavailable.
+- Need to identify health-related predictors and define obesity target.
 
 Solution Implemented:
-- Loaded BRFSS 2024 dataset and variable codebook.
-- Reviewed health condition variables: HYPERTENSION, CHOLESTEROL, DIABETES, ASTHMA, CARDIO.
-- Checked data types, missing values, and basic statistics for health variables.
-- Defined obesity target variable (BMI >= 30) and verified distribution.
-- Cross-checked health predictors for completeness and saved subset for team review.
+- Loaded BRFSS 2024 dataset.
+- Auto-mapped variables:
+    - Health: BMI, ASTHMA, heart disease, cholesterol, diabetes, general health, mental/physical unhealthy days, insurance, dental visits
+    - Demographic: Age, sex, race, education, income
+    - Behavioral: Exercise, smoking, alcohol, fruit/vegetable consumption
+- Defined obesity target variable (BMI ≥ 30)
+- Created preliminary dataset subset for team review.
+- Saved as `brfss_2024_mapped_vars.parquet`
 
 Impact:
-- Health-related predictors identified and preliminary checks completed.
-- Obesity target defined and ready for modeling.
-- Dataset subset for health predictors prepared for next milestone.
+- Team can proceed with preprocessing without codebook.
+- Health predictors and target variable ready for Milestone 2.
+- Dataset subset ensures consistent predictor selection.
 
 Next Steps:
-- Coordinate with team to categorize behavioral and demographic predictors.
-- Begin preliminary data cleaning and preprocessing in Milestone 2.
+- Begin Milestone 2: preprocessing (missing value handling, encoding, scaling, outlier detection).
+- Document preprocessing decisions for reproducibility.
