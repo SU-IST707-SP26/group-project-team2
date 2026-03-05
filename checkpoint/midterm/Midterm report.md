@@ -394,28 +394,38 @@ The project will now shift from **exploration to prediction**.
 The final objective is to build **predictive models capable of identifying obesity risk using health and behavioral variables.**
 
 ---
+Models Developed
 
+# Milestone 4 – Model Development (Developed)
+
+
+### Random Forest (Baseline Model) 
+- Captures nonlinear relationships
+- Provides feature importance for interpretability with PCA
+
+- Model Evaluation Metrics
+
+  - **Accuracy:** 0.90
+  - **Precision (Class 0):** 0.90
+  - **Precision (Class 1):** 0.00
+  - *It shows class imbalance (currently implementing the SMOTE method)*
+
+ 
 # Milestone 4 – Model Development (Next Step)
 
 Planned models include:
 
 ### Logistic Regression
-- Interpretable baseline model
-- Useful for identifying feature importance
-
-### Random Forest
-- Captures nonlinear relationships
-- Handles feature interactions well
+- Useful for identifying feature importance (maybe other baseline)
 
 ### Gradient Boosting (XGBoost or similar)
 - High predictive performance
-- Often strong on tabular health datasets
 
 ---
 
 ## Evaluation Metrics
 
-Models will be evaluated using:
+Models are and will be evaluated using:
 
 - Accuracy
 - Precision
@@ -441,8 +451,7 @@ By the end of the project we aim to:
 
 Milestone 4 tasks:
 
-1. Prepare final modeling dataset
-2. Split data into training and testing sets
-3. Train baseline models
-4. Compare model performance
-5. Identify most important predictors
+1. Split data into training and testing sets
+2. Implement other models
+3. Compare model performance
+4. Identify most important predictors
