@@ -75,7 +75,7 @@ Next Steps:
     - PCA or feature importance analysis
     - Risk cluster visualization
 
-2026-02-19 - Milestone 3: Exploratory Data Analysis (Quispe)
+## 2026-02-19 - Milestone 3: Exploratory Data Analysis (Quispe)
 
 Context:
 - Performed EDA on cleaned health predictors from BRFSS 2024 to identify interpretable patterns and potential high-risk subgroups.
