@@ -1,4 +1,4 @@
-# BRFSS 2024 Obesity Analysis – Project Summary & Key Findings (Midterm report)
+# BRFSS 2024 Obesity Analysis – Project Summary & Key Findings
 
 ## Project Overview
 
@@ -16,7 +16,7 @@ The analysis focuses on **health, behavioral, and demographic predictors** to un
 
 # Project Progress Summary
 
-## Milestone 1 – Variable Mapping and Feature Selection
+## Milestone 1 – Variable Mapping and Feature Selection (Quispe)
 
 ### What We Did
 
@@ -27,6 +27,7 @@ The analysis focuses on **health, behavioral, and demographic predictors** to un
 - Saved a filtered dataset containing selected features
 
 Output dataset:
+
 brfss_2024_mapped_vars.parquet
 
 
@@ -57,7 +58,112 @@ brfss_2024_mapped_vars.parquet
 
 ---
 
-## Milestone 2 – Data Cleaning and Preprocessing
+# Milestone 1 – Data Acquisition & Understanding (Lulu)
+
+The purpose of this task was to establish the **foundation for the entire project** by downloading the BRFSS 2024 dataset and the official codebook, which are required to properly interpret the survey variables before any preprocessing or modeling.
+
+### Dataset Acquisition
+
+- The original BRFSS dataset was provided in **.XPT format**.
+- File size was approximately **1.01 GB**, which exceeded GitHub storage limitations.
+- The dataset was converted into **Parquet format** and divided into smaller files to meet the **GitHub 25 MB limit**.
+
+The combined dataset contains:
+
+- **457,669 observations**
+- Hundreds of variables covering:
+  - demographics
+  - health conditions
+  - lifestyle behaviors
+  - chronic disease indicators
+
+The **BRFSS 2024 codebook** was downloaded and uploaded successfully to help interpret variable definitions and coding structures.
+
+### Initial Data Inspection
+
+Preliminary exploration included:
+
+- Reviewing **data types**
+- Inspecting **memory usage**
+- Generating **summary statistics**
+
+These steps helped guide later decisions about **data cleaning, feature encoding, and modeling preparation**.
+
+---
+
+## Milestone 1 – Task 2: Review Variables and Categorize Features (Lulu)
+
+This task focused on understanding the structure and meaning of the BRFSS variables using the official codebook.
+
+The objective was to **categorize variables into meaningful groups** and identify **behavioral/lifestyle predictors related to obesity**.
+
+### Key Behavioral Variables Identified
+
+**Physical Activity (_TOTINDA)**  
+Indicates whether the respondent engaged in exercise during the past 30 days.
+
+Results:
+
+Had physical activity or exercise: 350,061  
+No physical activity in last 30 days: 106,294
+
+---
+
+**Smoking Status (_RFSMOK3)**  
+Represents current smoking risk classification.
+
+The variable was converted from numeric codes into a **binary categorical variable** to improve interpretability.
+
+Results:
+
+No: 378,554  
+Yes: 47,094
+
+---
+
+**Heavy Drinking (_RFDRHV9)**  
+Indicates heavy alcohol consumption.
+
+The variable was converted from numeric codes into **Yes/No labels** for clarity.
+
+Results:
+
+No: 386,812  
+Yes: 24,160
+
+---
+
+These variables represent **key lifestyle behaviors known to influence obesity risk**.
+
+---
+
+## Milestone 1 – Task 3: Identify Obesity Target Variable (Lulu)
+
+This task focused on defining the **target variable for obesity prediction**.
+
+The project uses:
+
+_RFBMI5
+
+This variable directly encodes **obesity status based on the clinical definition of BMI ≥ 30**.
+
+### Processing Steps
+
+- Converted numeric coding into **binary categorical labels**:
+  - Yes = Obese
+  - No = Not Obese
+- Missing values were preserved as **NaN** to avoid introducing bias during modeling.
+
+### Results
+
+Obese (Yes): 286,203  
+Not Obese (No): 128,430
+
+This step established a **clean and interpretable target variable** for predictive modeling.
+
+---
+
+# Milestone 2 – Data Cleaning and Preprocessing (Quispe)
 
 ### What We Did
 
@@ -68,12 +174,73 @@ brfss_2024_mapped_vars.parquet
 - Flagged potential outliers using Z-score methods
 
 Output dataset:
-brfss_2024_cleaned_qusipe.parquet
 
+brfss_2024_cleaned_qusipe.parquet
 
 ---
 
-## Milestone 3 – Exploratory Data Analysis (EDA)
+# Milestone 2 – Behavioral Data Cleaning (Lulu)
+
+Missing value handling was critical to prevent biased analysis and model failures.
+
+### Imputation Strategy
+
+- Median imputation is robust for skewed data.
+- Mode imputation was applied for categorical variables.
+
+### Feature Adjustments
+
+Three numeric variables were **removed due to data leakage**:
+
+- BMI
+- Height
+- Weight
+
+These variables directly determine the **target variable (Obese)** and including them would cause **model leakage**.
+
+---
+
+### Encoding Strategy
+
+No nominal categorical variables were present.
+
+Feature types included:
+
+**Ordinal variables**
+- Age group
+- Education level
+- Income category
+
+Encoded using **OrdinalEncoder** to preserve ranking.
+
+**Binary variables**
+- Sex
+- Smoker
+- Heavy Drinker
+- Physical Activity
+
+Encoded as **0/1 values**.
+
+---
+
+### Feature Scaling
+
+StandardScaler was not applied because:
+
+- After removing leakage variables, no continuous numeric features remained.
+
+---
+
+### PCA
+
+PCA was not applied in this stage because:
+
+- PCA requires continuous numeric features
+- The remaining dataset contained mostly encoded categorical variables.
+
+---
+
+# Milestone 3 – Exploratory Data Analysis (EDA)
 
 ### Analyses Performed
 
@@ -190,7 +357,6 @@ The dataset initially did not include a codebook, which required:
 - referencing external BRFSS documentation
 - identifying health variables heuristically
 
-
 ---
 
 # What We Learned
@@ -203,9 +369,7 @@ Variables related to **hypertension, diabetes, and cholesterol** consistently al
 
 ### 2. Dimensionality Reduction is Effective
 
-PCA shows that **a small number of components capture most of the health variability**, meaning:
-
-The dataset contains **strong underlying latent health factors**.
+PCA shows that **a small number of components capture most of the health variability**.
 
 ---
 
@@ -219,8 +383,6 @@ Clustering allows us to detect **groups of individuals with similar health risk 
 
 Feature selection must avoid introducing bias from sparse variables.
 
-This influenced our approach toward **robust preprocessing and dimensionality reduction**.
-
 ---
 
 # Project Direction Toward Final Goal
@@ -231,17 +393,9 @@ The project will now shift from **exploration to prediction**.
 
 The final objective is to build **predictive models capable of identifying obesity risk using health and behavioral variables.**
 
-These models will allow us to:
-
-- identify the most important predictors
-- evaluate predictive performance
-- interpret risk factors for public health insights
-
 ---
 
 # Milestone 4 – Model Development (Next Step)
-
-The next phase will focus on **building predictive models for obesity classification**.
 
 Planned models include:
 
