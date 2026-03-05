@@ -74,3 +74,26 @@ Next Steps:
     - Correlations
     - PCA or feature importance analysis
     - Risk cluster visualization
+
+2026-02-19 - Milestone 3: Exploratory Data Analysis (Quispe)
+
+Context:
+- Performed EDA on cleaned health predictors from BRFSS 2024 to identify interpretable patterns and potential high-risk subgroups.
+
+Solution Implemented:
+- Generated summary statistics and distributions for health variables.
+- Visualized correlations and identified relationships with obesity.
+- Applied PCA to understand variance explained by numeric features.
+- Clustered respondents using K-means (3 clusters) to identify risk subgroups.
+- Visualized risk clusters on primary health variables for interpretation.
+- Saved final EDA dataset with cluster labels.
+
+Impact:
+- Identified potential high-risk subgroups and feature patterns for obesity.
+- Summary statistics and visualizations provide actionable insights for public health researchers.
+- Prepared data for predictive modeling and further analysis if needed.
+
+Next Steps:
+- Share visualizations and PCA results with team for interpretation.
+- Prioritize actionable predictors and clusters for reporting.
+- Integrate findings into CDC-ready summary tables and visual reports.
