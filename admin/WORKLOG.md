@@ -49,7 +49,7 @@ Next Steps:
 - Document preprocessing decisions for reproducibility.
 
 
-##2026-02-11 - Milestone 2: Data Cleaning & Preprocessing (Quispe)
+## 2026-02-11 - Milestone 2: Data Cleaning & Preprocessing (Quispe)
 
 Context:
 - Preprocessing health variables from BRFSS 2024 mapped dataset.
