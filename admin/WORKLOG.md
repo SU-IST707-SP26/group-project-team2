@@ -23,7 +23,7 @@
 **Next Steps:** Review variables and identify target/predictors for obesity prediction.
 
 
-2026-02-05 - Milestone 1: Data Acquisition & Understanding (Quispe)
+## 2026-02-05 - Milestone 1: Data Acquisition & Understanding (Quispe)
 
 Context:
 - BRFSS 2024 codebook unavailable.
@@ -49,7 +49,7 @@ Next Steps:
 - Document preprocessing decisions for reproducibility.
 
 
-2026-02-011 - Milestone 2: Data Cleaning & Preprocessing (Quispe)
+##2026-02-11 - Milestone 2: Data Cleaning & Preprocessing (Quispe)
 
 Context:
 - Preprocessing health variables from BRFSS 2024 mapped dataset.
