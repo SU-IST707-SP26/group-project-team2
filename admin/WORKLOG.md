@@ -47,3 +47,30 @@ Impact:
 Next Steps:
 - Begin Milestone 2: preprocessing (missing value handling, encoding, scaling, outlier detection).
 - Document preprocessing decisions for reproducibility.
+
+
+2026-02-011 - Milestone 2: Data Cleaning & Preprocessing (Quispe)
+
+Context:
+- Preprocessing health variables from BRFSS 2024 mapped dataset.
+- Goal: Prepare clean, consistent data for Milestone 3 EDA and modeling.
+
+Solution Implemented:
+- Flagged health variables with >20% missing values.
+- Imputed missing numeric values using median.
+- Encoded ordinal variables (e.g., ASTHMA severity) with OrdinalEncoder.
+- Scaled numeric features using RobustScaler to reduce outlier influence.
+- Detected outliers using z-score method and flagged them.
+- Saved cleaned dataset for downstream analysis as `brfss_2024_cleaned_qusipe.parquet`.
+
+Impact:
+- Health variables are now clean, scaled, and ready for exploratory analysis.
+- Outlier flags allow informed decisions for modeling.
+- Cleaned dataset ensures reproducibility and consistency across team members.
+
+Next Steps:
+- Perform Milestone 3 EDA:
+    - Summary statistics and distributions
+    - Correlations
+    - PCA or feature importance analysis
+    - Risk cluster visualization
