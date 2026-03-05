@@ -163,7 +163,7 @@ This step established a **clean and interpretable target variable** for predicti
 
 ---
 
-# Milestone 2 – Data Cleaning and Preprocessing (Quispe)
+# Milestone 2 – Data Cleaning and Preprocessing (Quispe Diego)
 
 ### What We Did
 
@@ -396,10 +396,10 @@ The final objective is to build **predictive models capable of identifying obesi
 ---
 Models Developed
 
-# Milestone 4 – Model Development (Developed)
+# Milestone 4 – Model Development (Developed) (Quispe)
 
 
-### Random Forest (Baseline Model) 
+### Random Forest (Baseline Model) (Quispe)
 - Captures nonlinear relationships
 - Provides feature importance for interpretability with PCA
 
