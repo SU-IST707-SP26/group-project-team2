@@ -97,3 +97,30 @@ Next Steps:
 - Share visualizations and PCA results with team for interpretation.
 - Prioritize actionable predictors and clusters for reporting.
 - Integrate findings into CDC-ready summary tables and visual reports.
+
+
+## 2026-03-05 - Milestone 4: Baseline Modeling with Random Forest (Quispe)
+
+**Context:**  
+- Built an initial predictive model to classify obesity (BMI ≥ 30) using PCA-transformed health variables from the BRFSS 2024 dataset.  
+- Objective was to establish a baseline performance and identify potential modeling challenges such as class imbalance.
+
+**Solution Implemented:**  
+- Loaded cleaned BRFSS 2024 dataset and selected health variables for PCA transformation.  
+- Applied previously saved PCA (`pca_health_vars.joblib`) to reduce dimensionality to 5 components.  
+- Split data into train/test sets (80/20), stratified by obesity status.  
+- Trained a **Random Forest classifier** (`n_estimators=100`, `max_depth=5`) on PCA features.  
+- Evaluated performance using confusion matrix, classification report, and ROC-AUC score.  
+
+**Impact:**  
+- Model shows **high accuracy (0.90)** but fails to predict the minority obese class due to severe class imbalance.  
+- Confusion matrix indicates the classifier predicts **only non-obese individuals**.  
+- ROC-AUC is near 0.5, confirming poor discrimination for obesity.  
+- Highlighted the need for imbalance correction and potential hyperparameter tuning.  
+
+**Next Steps:**  
+- Apply **SMOTE or other oversampling techniques** to address class imbalance.  
+- Tune Random Forest hyperparameters (`max_depth`, `n_estimators`, `min_samples_split`) for improved performance.  
+- Analyze **PCA component contributions** to map back to original health variables for interpretability.  
+- Evaluate additional models (Logistic Regression, Gradient Boosting/XGBoost) for comparative performance.  
+- Integrate baseline modeling results into milestone report and project checkpoint documentation.
