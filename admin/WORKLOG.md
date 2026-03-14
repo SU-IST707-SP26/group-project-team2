@@ -124,3 +124,72 @@ Next Steps:
 - Analyze **PCA component contributions** to map back to original health variables for interpretability.  
 - Evaluate additional models (Logistic Regression, Gradient Boosting/XGBoost) for comparative performance.  
 - Integrate baseline modeling results into milestone report and project checkpoint documentation.
+
+
+## 2026-03-05 - Milestone 1: Milestone 1: Data Acquisition & Variable Review (Arakkal)
+
+**Context**
+- BRFSS 2024 dataset contains a large number of health, demographic, and behavioral variables.
+- The project required **identifying predictor variables related to obesity risk.**
+- Needed to review demographic and behavioral variables before preprocessing.
+
+**Solution Implemented**
+- Needed to review demographic and behavioral variables before preprocessing.
+- Loaded the BRFSS 2024 dataset for analysis
+  - Age
+  - Sex
+  - Education Level
+  - Income Category
+- Reviewed candidate **behavioral variables**: 
+  - Physical Activity
+  - Smoking status
+  - Alcohol Consumption (Heavy Drinker)
+- Examined distribution of behavioral variables using count plots to understand class balance.
+- Examined distribution of behavioral variables using count plots to understand class balance.
+
+**Impact**
+- Established a clear list of predictor variables for further preprocessing.
+- Ensured that demographic and behavioral predictors were correctly understood before cleaning.
+- Ensured that demographic and behavioral predictors were correctly understood before cleaning.
+
+**Next Steps**
+- Begin Milestone 2 preprocessing tasks.
+- Handle missing values and encode categorical variables.
+- Prepare numeric health variables for scaling and outlier detection.
+
+
+## 2026-03-05 - Milestone 2 -Data Cleaning & Preprocessing (Arakkal)
+
+**Context**
+- Selected health and behavioral predictors required preprocessing before analysis.
+- Dataset contained missing values and required normalization and outlier detection.
+- Goal was to create a **clean and consistent dataset for EDA and modeling**.
+
+**Solution Implemented**
+- Converted raw health measurements into usable numeric variables:
+  - BMI
+  - Height (meters)
+  - Weight (Kg)
+- Reviewed descriptive statistics to understand distributions of numeric variables.
+- Applied **KNN imputation** to handle missing values in key health variables.
+- Evaluated categorical variables for **high cardinality** to determine if target encoding was required.
+- Identified that demographic and behavioral variables had low cardinality, so target encoding was not necessary.
+- Applied **MinMaxScaler** to normalize numeric variables between 0 and 1.
+- Performed Isolation Forest outlier detection using:
+  - BMI
+  - Height 
+  - Weight
+- Flagged approximately **1% of observations as outliers**.
+- Removed outliers from the dataset to improve data quality.
+- Verified dataset integrity and confirmed removal of anomalous observations.
+
+**Impact**
+- Missing values were handled using a robust imputation technique.
+- Numeric variables were normalized for compatibility with machine learning algorithms.
+- Outlier removal improved dataset quality by eliminating extreme observations.
+- The resulting dataset is **clean, consistent, and ready for exploratory analysis**.
+
+**Next Steps**
+- Perform exploratory data analysis (Milestone 3).
+- Generate summary statistics and visualizations.
+- Explore relationships between predictors and obesity indicators.
