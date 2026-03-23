@@ -193,3 +193,150 @@ Next Steps:
 - Perform exploratory data analysis (Milestone 3).
 - Generate summary statistics and visualizations.
 - Explore relationships between predictors and obesity indicators.
+
+- ________________________________________
+**13th March 2026 —Milestone 3: Data Acquisition & Initial Inspection**(Lulu)
+**Features Selected:**
+•	Health conditions: _AGE_G, SEXVAR, _EDUCAG, _INCOMG1
+•	Actionable behavioral/lifestyle features and health conditions: _BMI5, _RFBMI5, HTM4, _TOTINDA, WTKG3, _RFSMOK3, _RFDRHV9, DIABETE4, ASTHNOW, CHCKDNY2, _DRDXAR2
+Impact: Successfully consolidated the dataset into a single working file and narrowed the scope from the full BRFSS variable list down to 15 meaningful predictors, reducing noise and keeping the analysis focused on obesity-related factors.
+
+
+**15th March 2026 —Milestone 3: Data Cleaning & Variable Recoding**( Lulu)
+Tasks Completed:
+•	Combined all 15 columns to human-readable names (e.g. _BMI5 → BMI, _RFBMI5 → Obese)
+•	Recoded numeric codes into meaningful categorical labels for: 
+o	Income Category (7 ordered levels + Missing)
+o	Education Level (4 ordered levels + Missing)
+o	Age Group (6 ordered levels)
+o	Sex, Smoking, Heavy Drinking, Physical Activity, Obesity (binary Yes/No)
+o	Asthma, Diabetes, Kidney Disease, Arthritis (binary Yes/No)
+•	Converted all variables to appropriate data types (Int64, pd.Categorical)
+•	Applied ordered categories where applicable to preserve natural hierarchy
+Context: The raw BRFSS dataset stores all variables as numeric codes (e.g. 1, 2, 9) which are meaningless without the codebook. These codes needed to be translated into readable labels and structured as ordered or unordered categories depending on the variable type, so they could be correctly interpreted during analysis and modelling.
+Solution Implemented: Used pd.Categorical() with ordered=True for variables with a natural hierarchy (Age, Education, Income) and standard mapping for binary variables (Yes/No). Assigned np.nan to unknown or missing codes (e.g. code 9) to handle them properly in later imputation steps.
+Impact: Dataset became fully interpretable and self-documenting. Ordered categorical variables preserved their natural hierarchy, which is critical for OrdinalEncoder to assign correct numeric rankings during preprocessing. Binary variables were clearly labeled, eliminating any risk of misinterpretation during modelling.
+
+**15nd March 2026 — Milestone 3:Exploratory Data Analysis (EDA)**
+Tasks Completed:
+•	Generated summary statistics for all categorical variables using data.describe(include="category")
+•	Selected the three numeric variables: BMI, Height(m), Weight(kg)
+•	Computed correlation matrix and visualized it using a Seaborn heatmap (coolwarm palette)
+Key Findings:
+Variable Pair	Correlation	Interpretation
+BMI & Weight	0.85	Strong positive — multicollinearity detected
+Height & Weight	0.46	Moderate positive
+BMI & Height	-0.04	Almost no relationship
+Context: Before building any model, it was important to understand how the numeric variables related to each other. Having highly correlated predictors in a model causes multicollinearity, which can distort model estimates, inflate standard errors, and make it harder to interpret which variables are truly driving predictions.
+Solution Implemented: Computed a Pearson correlation matrix and visualized it using a Seaborn heatmap with coolwarm colors to make strong and weak relationships immediately visible. Upon detecting a strong correlation of 0.85 between BMI and Weight, the decision was made to drop Height(m) and Weight(kg) and retain only BMI as the sole anthropometric predictor.
+Impact: Eliminated multicollinearity from the feature set. Retaining only BMI reduced redundancy while preserving clinically meaningful information, since BMI is a standardized summary measure of both height and weight. This led to a cleaner, more interpretable feature set going into preprocessing.
+
+**21th March 2026 Milestone 4 Data Preprocessing & Feature Engineering** (Lulu)
+Tasks Completed:
+•	Built three separate sklearn pipelines: 
+o	Ordinal Pipeline: SimpleImputer (most_frequent) + OrdinalEncoder for Age, Education, Income
+o	Binary Pipeline: SimpleImputer (most_frequent) + OrdinalEncoder for Sex and health condition variables
+o	Numeric Pipeline: SimpleImputer (mean) + StandardScaler for BMI
+•	Combined all pipelines using ColumnTransformer
+•	Applied fit_transform() on feature matrix X
+•	Converted processed array back to a readable DataFrame
+•	Dropped 43,037 rows with missing target variable (Obese) out of 457,669 observations
+Summary Stats After Preprocessing:
+•	No missing values remained in any feature column
+•	Target variable (Obese) confirmed present and clean
+Context: Machine learning models cannot handle raw categorical text, missing values, or variables on vastly different numeric scales. Each variable type required a different treatment strategy — ordinal variables needed order-preserving encoding, binary variables needed simple 0/1 conversion, and the numeric BMI variable needed imputation and scaling to bring it in line with the other features.
+Solution Implemented: Built three tailored pipelines and combined them using ColumnTransformer so that each column type received the correct treatment simultaneously. Missing values in features were imputed before encoding to prevent errors. Rows with missing target values were removed separately after preprocessing since imputing the target variable would introduce bias into the model.
+Impact: Produced a fully clean, encoded, and scaled dataset with zero missing values across all 11 features. The pipeline approach also ensures that the same transformations can be consistently reapplied to new data in future, making the preprocessing reproducible and production-ready.
+
+**22-March-2026 Milestone 4:Modelling & Evaluation**(Lulu)
+Tasks Completed:
+•	Built a reusable run_classifier() function incorporating: 
+o	80/20 train-test split with stratification
+o	SMOTE oversampling to handle class imbalance
+o	5-Fold Cross Validation (scoring: F1 Macro)
+o	Classification report (Precision, Recall, F1)
+o	ROC-AUC score
+Models Trained:
+Round 1 — With BMI included:
+•	Logistic Regression: Suspiciously perfect scores detected
+•	Random Forest: Also showed near-perfect results
+•	Investigation revealed BMI had a 0.647 correlation with the target (Obese), causing data leakage
+Round 2 — BMI dropped (leakage fix):
+•	Retrained both Logistic Regression and Random Forest without BMI
+•	Performance dropped to realistic levels
+Round 3 — Sex variable also dropped:
+•	Removed Sex column and retrained both models
+•	Ran correlation check on remaining features against target variable
+Context: The target variable Obese was imbalanced, with a majority of observations being non-obese. Training a model directly on imbalanced data would cause it to bias towards the majority class and perform poorly at identifying obese individuals. Additionally, BMI was initially included as a feature without realizing it is the clinical definition of obesity (BMI ≥ 30 = Obese), meaning the model was essentially being given the answer during training.
+Solution Implemented: Applied SMOTE within the training pipeline to synthetically balance the classes before model training. Used 5-Fold Cross Validation to get a reliable performance estimate. Upon detecting suspiciously perfect scores, ran a correlation check between all features and the target, identified BMI as the leaking variable (r = 0.647), and dropped it. Subsequently also dropped Sex and retrained to further validate the model on genuinely predictive features only.
+Impact: Removing BMI brought model scores down from near-perfect to realistic levels, producing an honest and trustworthy evaluation of model performance. Resolving the leakage ensured the final model learns from genuine behavioral and socioeconomic risk factors rather than the clinical definition of the outcome itself, making it meaningful and applicable in a real-world prediction context.
+________________________________________
+
+Tasks Completed:
+•	Combined all 15 columns to human-readable names (e.g. _BMI5 → BMI, _RFBMI5 → Obese)
+•	Recoded numeric codes into meaningful categorical labels for: 
+o	Income Category (7 ordered levels + Missing)
+o	Education Level (4 ordered levels + Missing)
+o	Age Group (6 ordered levels)
+o	Sex, Smoking, Heavy Drinking, Physical Activity, Obesity (binary Yes/No)
+o	Asthma, Diabetes, Kidney Disease, Arthritis (binary Yes/No)
+•	Converted all variables to appropriate data types (Int64, pd.Categorical)
+•	Applied ordered categories where applicable to preserve natural hierarchy
+Context: The raw BRFSS dataset stores all variables as numeric codes (e.g. 1, 2, 9) which are meaningless without the codebook. These codes needed to be translated into readable labels and structured as ordered or unordered categories depending on the variable type, so they could be correctly interpreted during analysis and modelling.
+Solution Implemented: Used pd.Categorical() with ordered=True for variables with a natural hierarchy (Age, Education, Income) and standard mapping for binary variables (Yes/No). Assigned np.nan to unknown or missing codes (e.g. code 9) to handle them properly in later imputation steps.
+Impact: Dataset became fully interpretable and self-documenting. Ordered categorical variables preserved their natural hierarchy, which is critical for OrdinalEncoder to assign correct numeric rankings during preprocessing. Binary variables were clearly labeled, eliminating any risk of misinterpretation during modelling.
+
+**15nd March 2026 — Exploratory Data Analysis (EDA)**(lulu)
+Tasks Completed:
+•	Generated summary statistics for all categorical variables using data.describe(include="category")
+•	Selected the three numeric variables: BMI, Height(m), Weight(kg)
+•	Computed correlation matrix and visualized it using a Seaborn heatmap (coolwarm palette)
+Key Findings:
+Variable Pair	Correlation	Interpretation
+BMI & Weight	0.85	Strong positive — multicollinearity detected
+Height & Weight	0.46	Moderate positive
+BMI & Height	-0.04	Almost no relationship
+Context: Before building any model, it was important to understand how the numeric variables related to each other. Having highly correlated predictors in a model causes multicollinearity, which can distort model estimates, inflate standard errors, and make it harder to interpret which variables are truly driving predictions.
+Solution Implemented: Computed a Pearson correlation matrix and visualized it using a Seaborn heatmap with coolwarm colors to make strong and weak relationships immediately visible. Upon detecting a strong correlation of 0.85 between BMI and Weight, the decision was made to drop Height(m) and Weight(kg) and retain only BMI as the sole anthropometric predictor.
+Impact: Eliminated multicollinearity from the feature set. Retaining only BMI reduced redundancy while preserving clinically meaningful information, since BMI is a standardized summary measure of both height and weight. This led to a cleaner, more interpretable feature set going into preprocessing.
+
+**21th March 2026 Data Preprocessing & Feature Engineering** (Lulu)****
+Tasks Completed:
+•	Built three separate sklearn pipelines: 
+o	Ordinal Pipeline: SimpleImputer (most_frequent) + OrdinalEncoder for Age, Education, Income
+o	Binary Pipeline: SimpleImputer (most_frequent) + OrdinalEncoder for Sex and health condition variables
+o	Numeric Pipeline: SimpleImputer (mean) + StandardScaler for BMI
+•	Combined all pipelines using ColumnTransformer
+•	Applied fit_transform() on feature matrix X
+•	Converted processed array back to a readable DataFrame
+•	Dropped 43,037 rows with missing target variable (Obese) out of 457,669 observations
+Summary Stats After Preprocessing:
+•	No missing values remained in any feature column
+•	Target variable (Obese) confirmed present and clean
+Context: Machine learning models cannot handle raw categorical text, missing values, or variables on vastly different numeric scales. Each variable type required a different treatment strategy — ordinal variables needed order-preserving encoding, binary variables needed simple 0/1 conversion, and the numeric BMI variable needed imputation and scaling to bring it in line with the other features.
+Solution Implemented: Built three tailored pipelines and combined them using ColumnTransformer so that each column type received the correct treatment simultaneously. Missing values in features were imputed before encoding to prevent errors. Rows with missing target values were removed separately after preprocessing since imputing the target variable would introduce bias into the model.
+Impact: Produced a fully clean, encoded, and scaled dataset with zero missing values across all 11 features. The pipeline approach also ensures that the same transformations can be consistently reapplied to new data in future, making the preprocessing reproducible and production-ready.
+
+**22-March-2026 Modelling & Evaluation** **Lulu**
+Tasks Completed:
+•	Built a reusable run_classifier() function incorporating: 
+o	80/20 train-test split with stratification
+o	SMOTE oversampling to handle class imbalance
+o	5-Fold Cross Validation (scoring: F1 Macro)
+o	Classification report (Precision, Recall, F1)
+o	ROC-AUC score
+Models Trained:
+Round 1 — With BMI included:
+•	Logistic Regression: Suspiciously perfect scores detected
+•	Random Forest: Also showed near-perfect results
+•	Investigation revealed BMI had a 0.647 correlation with the target (Obese), causing data leakage
+Round 2 — BMI dropped (leakage fix):
+•	Retrained both Logistic Regression and Random Forest without BMI
+•	Performance dropped to realistic levels
+Round 3 — Sex variable also dropped:
+•	Removed Sex column and retrained both models
+•	Ran correlation check on remaining features against target variable
+Context: The target variable Obese was imbalanced, with a majority of observations being non-obese. Training a model directly on imbalanced data would cause it to bias towards the majority class and perform poorly at identifying obese individuals. Additionally, BMI was initially included as a feature without realizing it is the clinical definition of obesity (BMI ≥ 30 = Obese), meaning the model was essentially being given the answer during training.
+Solution Implemented: Applied SMOTE within the training pipeline to synthetically balance the classes before model training. Used 5-Fold Cross Validation to get a reliable performance estimate. Upon detecting suspiciously perfect scores, ran a correlation check between all features and the target, identified BMI as the leaking variable (r = 0.647), and dropped it. Subsequently also dropped Sex and retrained to further validate the model on genuinely predictive features only.
+Impact: Removing BMI brought model scores down from near-perfect to realistic levels, producing an honest and trustworthy evaluation of model performance. Resolving the leakage ensured the final model learns from genuine behavioral and socioeconomic risk factors rather than the clinical definition of the outcome itself, making it meaningful and applicable in a real-world prediction context.
+________________________________________
