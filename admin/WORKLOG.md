@@ -346,5 +346,5 @@ Work Completed- Review metadata and compare with 2024 structure
 •	Reviewed metadata for each year, focusing on variable names, labels, coding schemes, and module availability.
 •	Compared the 2023 metadata against the 2024 BRFSS structure to identify structural differences.
 •	Documented variables that appear consistently across all years Diabetes, Asthma, Kidney Disease, Arthritis.
-•	Identified variables present in earlier years but missing in 2024 like Hypertension and Cholesterol.
+•	Identified variables present in earlier years but missing in 2024 like Hypertension and Cholesterol and heavydrinker 2023 dataset.
 
