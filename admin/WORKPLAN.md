@@ -73,7 +73,104 @@
 
 ---
 
+## Milestone 6: Multi-Year Data Integration (2023 + 2024)
+
+**Goal:** Combine BRFSS 2023 and 2024 datasets to improve robustness and generalizability of findings without complex temporal modeling.
+
+### ☐ M6.T1 — Acquire additional dataset
+- **Quispe:** Download BRFSS 2023 dataset and codebooks  
+- **Massasi:** Review metadata and compare with 2024 structure  
+- **Arakkal:** Organize files into shared repository  
+
+### ☐ M6.T2 — Harmonize variables across years
+- **Massasi:** Align variable names, labels, and coding schemes  
+- **Arakkal:** Standardize categorical levels and missing value representations  
+- **Quispe:** Ensure consistent BMI calculation and obesity definition  
+
+### ☐ M6.T3 — Merge datasets
+- **Arakkal:** Add a `year` indicator feature (2023, 2024)  
+- **Quispe:** Concatenate datasets into a unified dataframe  
+- **Massasi:** Validate consistency of distributions across years  
+
+### ☐ M6.T4 — Validate combined dataset
+- **Quispe:** Check for data imbalance between years  
+- **Massasi:** Identify unexpected distribution shifts  
+- **Arakkal:** Flag variables that behave inconsistently across years  
+
+ **Note:** Focus on improving dataset size and robustness—not on time-series modeling.
+
+---
+
+## Milestone 7: Expanded Modeling (Including Advanced Models)
+
+**Goal:** Evaluate a wider range of models to balance interpretability and predictive performance.
+
+### ☐ M7.T1 — Final dataset preparation
+- **Arakkal:** Finalize selected feature set  
+- **Quispe:** Ensure consistent encoding across all features  
+- **Massasi:** Create train/validation/test splits (stratified)  
+
+### ☐ M7.T2 — Train baseline models
+- **Massasi:** Logistic Regression  
+- **Quispe:** Decision Tree  
+
+### ☐ M7.T3 — Train ensemble and advanced models
+- **Arakkal:** Random Forest  
+- **Massasi:** Gradient Boosting (XGBoost / LightGBM if available)  
+- **Quispe:** Optional SVM  
+
+### ☐ M7.T4 — Model evaluation
+- **Quispe:** Compute Precision, Recall, F1-score  
+- **Massasi:** Compute ROC-AUC and compare across models  
+- **Arakkal:** Summarize performance and stability  
+
+### ☐ M7.T5 — Feature importance & interpretability
+- **Massasi:** Logistic Regression coefficients  
+- **Arakkal:** Tree-based feature importance  
+- **Quispe:** SHAP / permutation importance  
+
+### ☐ M7.T6 — Model selection
+- **Arakkal:** Lead model comparison discussion  
+- **Massasi:** Evaluate interpretability trade-offs  
+- **Quispe:** Document final model selection and rationale  
+
+---
+
+## Milestone 8: Final Presentation & Reporting
+
+**Goal:** Deliver clear, actionable insights with strong visualizations and a compelling narrative.
+
+### ☐ M8.T1 — Results synthesis
+- **Quispe:** Behavioral risk factors summary  
+- **Massasi:** Demographic high-risk groups  
+- **Arakkal:** Health-condition interactions  
+
+### ☐ M8.T2 — Visualization development
+- **Arakkal:** Feature importance plots  
+- **Massasi:** Risk group comparisons  
+- **Quispe:** Correlation heatmaps & model comparison charts  
+
+### ☐ M8.T3 — Actionable insights
+- **Massasi:** Public health recommendations  
+- **Quispe:** Identify modifiable risk factors  
+- **Arakkal:** Targeted intervention strategies  
+
+### ☐ M8.T4 — Presentation preparation
+- **Arakkal:** Slides (problem, data, modeling)  
+- **Quispe:** Slides (results, insights)  
+- **Massasi:** Slides (recommendations, limitations)  
+
+### ☐ M8.T5 — Final report
+- Methodology section  
+- Results & visualizations  
+- Editing, formatting, and reproducibility  
+ 
+
+---
+
+
 ## Changelog
+- 2026-04-01 - Updated for final presentation
 - 2026-02-01 — Created initial WORKPLAN for BRFSS obesity prediction project  
 - 2026-02-15 — Updated scope to focus on actionable, interpretable predictors; assigned specific tasks for three team members in Milestones 1 & 2
 
