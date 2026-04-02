@@ -340,3 +340,11 @@ Context: The target variable Obese was imbalanced, with a majority of observatio
 Solution Implemented: Applied SMOTE within the training pipeline to synthetically balance the classes before model training. Used 5-Fold Cross Validation to get a reliable performance estimate. Upon detecting suspiciously perfect scores, ran a correlation check between all features and the target, identified BMI as the leaking variable (r = 0.647), and dropped it. Subsequently also dropped Sex and retrained to further validate the model on genuinely predictive features only.
 Impact: Removing BMI brought model scores down from near-perfect to realistic levels, producing an honest and trustworthy evaluation of model performance. Resolving the leakage ensured the final model learns from genuine behavioral and socioeconomic risk factors rather than the clinical definition of the outcome itself, making it meaningful and applicable in a real-world prediction context.
 ________________________________________
+**Milston6.Task1- April 2nd 2026 — Acquire additional dataset (Lulu) **
+Work Completed- Review metadata and compare with 2024 structure
+•	Retrieved and loaded additional BRFSS datasets 2023.
+•	Reviewed metadata for each year, focusing on variable names, labels, coding schemes, and module availability.
+•	Compared the 2023 metadata against the 2024 BRFSS structure to identify structural differences.
+•	Documented variables that appear consistently across all years Diabetes, Asthma, Kidney Disease, Arthritis.
+•	Identified variables present in earlier years but missing in 2024 like Hypertension and Cholesterol.
+
