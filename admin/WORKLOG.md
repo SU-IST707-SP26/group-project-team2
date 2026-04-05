@@ -125,6 +125,35 @@ Next Steps:
 - Evaluate additional models (Logistic Regression, Gradient Boosting/XGBoost) for comparative performance.  
 - Integrate baseline modeling results into milestone report and project checkpoint documentation.
 
+# 2026-03-18 – Milestone 4/5: Baseline Modeling with KNN for Diabetes Prediction
+
+**Context:**  
+Built an KNN model to classify diabetes (`DIABETE_BIN = 1`) using PCA-transformed health variables from the BRFSS 2024 dataset. 
+
+**Solution Implemented:**  
+
+- Loaded the cleaned BRFSS 2024 dataset and selected key health variables: `_ASTHMS1`, `CHCKDNY2`, `_DRDXAR2`, `_EDUCAG`, `_INCOMG1`, `_AGE_G`, `_SEX`, `WTKG3`, `HTM4`, `_RFBMI5`, `_BMI5`, `_RFDRHV9`, `_RFSMOK3`, `_TOTINDA`.  
+- Checked for missing values and handled them by dropping or imputing as needed.  
+- Split data into train/test sets (80/20), stratified by diabetes status.  
+- Applied `StandardScaler` for feature scaling and PCA for dimensionality reduction (retaining 95% variance).  
+- Trained a K-Nearest Neighbors (KNN) classifier on PCA-transformed features.  
+- Evaluated model performance using a classification report, focusing on precision, recall, and F1-score.
+
+**Impact:**  
+
+- The model achieved **accuracy of 81%**, but performance on the minority class (diabetes) is low:  
+  - Precision: 0.39  
+  - Recall: 0.20  
+  - F1-score: 0.26  
+- Macro F1-score is 0.58, showing moderate average performance across classes.  
+- PCA analysis showed that PC1 is dominated by **weight, height, BMI, and sex**, while PC2 captures **age and chronic conditions like arthritis**.  
+- Scatterplots of PC1 vs PC2 indicate overlapping clusters between diabetic and non-diabetic individuals, confirming that simple linear separation is difficult.
+
+**Next Steps:**  
+
+- Apply oversampling methods (e.g., SMOTE) to address class imbalance.  
+- Test additional classifiers such as XGBoost or Random Forest for better discrimination of diabetic cases.  
+
 
 ## 2026-03-05 - Milestone 1: Milestone 1: Data Acquisition & Variable Review (Arakkal)
 
