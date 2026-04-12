@@ -180,8 +180,35 @@ Improved the baseline diabetes prediction model by addressing class imbalance an
 **Next Steps:**  
 
 - Tune XGBoost hyperparameters to improve precision-recall balance.  
-- Adjust classification threshold to reduce false positives.  
+- Adjust classification threshold to reduce false positives.
+  
+## 2026-04-08 – Milestone 6: Multi-Year BRFSS Data Integration & Temporal Consistency Analysis for Diabetes Prediction (Quispe)
 
+### Context:
+Integrated BRFSS health survey datasets from 2022, 2023, and 2024 to build a unified dataset for diabetes prediction, with a strong focus on verifying temporal stability and feature consistency across years before modeling.
+
+### Solution Implemented:
+- Loaded and standardized BRFSS datasets for 2022, 2023, and 2024.  
+- Selected a consistent set of health-related features and aligned them across all years.  
+- Concatenated datasets into a single unified dataframe (`df_final`) with a `year` indicator.  
+- Cleaned and recoded the target variable (`DIABETE4`) into a binary label (`DIABETE_BIN`: 0 = no diabetes, 1 = diabetes/prediabetes).  
+- Standardized binary health indicators and encoded sex variable for consistency.  
+- Performed missing data analysis across features and quantified missingness by variable and year.  
+
+### Temporal / Trend Analysis Component:
+- Verified dataset balance across years (2022–2024), confirming no temporal sampling bias (~33% per year).  
+- Analyzed feature stability across time by comparing yearly means for key variables (e.g., BMI, age group, income).  
+- Evaluated distribution shifts using group-by-year statistics and KDE plots (e.g., BMI distribution across years).  
+- Identified that most features remain stable over time, with only minor fluctuations.  
+- Detected a major temporal inconsistency in `_RFDRHV9`, which is missing or not comparable across years (~69% missing overall), indicating a survey structure change or variable discontinuity.  
+
+### Impact:
+The final dataset contains 1.33M records across three years with balanced year representation (~33% each year). Temporal analysis confirmed overall stability of core health variables (BMI, age, income), supporting their validity for longitudinal modeling. However, strong class imbalance remains in the target (83% non-diabetes vs 17% diabetes/prediabetes). A critical temporal inconsistency was identified in `_RFDRHV9`, making it unsuitable for multi-year modeling without removal or restructuring.
+
+### Next Steps:
+- Remove or imput `_RFDRHV9` due to temporal inconsistency and high missingness.  
+- Address class imbalance before modeling (SMOTE or class weighting).  
+- Proceed to predictive modeling using temporally validated feature set.
 
 
 ## 2026-03-05 - Milestone 1: Milestone 1: Data Acquisition & Variable Review (Arakkal)
