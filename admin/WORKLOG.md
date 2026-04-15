@@ -392,11 +392,84 @@ The target variable (Obese) is imbalanced, and initial inclusion of BMI introduc
 - Perform feature importance analysis for interpretability  
 
 ________________________________________
-**Milston6.Task1- April 2nd 2026 — Acquire additional dataset (Lulu) **
-Work Completed- Review metadata and compare with 2024 structure
-•	Retrieved and loaded additional BRFSS datasets 2023.
-•	Reviewed metadata for each year, focusing on variable names, labels, coding schemes, and module availability.
-•	Compared the 2023 metadata against the 2024 BRFSS structure to identify structural differences.
-•	Documented variables that appear consistently across all years Diabetes, Asthma, Kidney Disease, Arthritis.
-•	Identified variables present in earlier years but missing in 2024 like Hypertension and Cholesterol and heavydrinker 2023 dataset.
+**M6.T1 April 2nd 2026 — Acquire Additional Dataset(Lulu)**
+ 
+Objective: Download and organize BRFSS 2022, 2023, and 2024 raw datasets and codebooks for cross-year harmonization.
+
+**Context**
+Raw survey files for 2023 and 2024 needed to be downloaded and organized alongside the existing 2022 dataset before harmonization.
+Solution Implemented
+•	Downloaded BRFSS 2023 (brfss2023_part1.parquet.gzip, brfss2023_part2.parquet.gzip) and 2022 raw survey data
+•	Reviewed codebooks identified heavy drinking variable name change: _RFDRHV8 (2022/2023) to _RFDRHV9 (2024)
+•	Confirmed shared 14 variable core set across all three years
+•	Identified High_Cholesterol (TOLDHI3) and High_BP (BPMEDS1) available in 2023 only absent from 2022 and 2024
+•	Organized all raw files in shared repository under Output/
+
+**Impact**
+All raw data secured. Variable naming issues and structural gaps (High_Cholesterol, High_BP) identified early.
+Next Steps
+•	M6.T2 harmonize variable names, labels, and coding schemes
+•	Assign placeholder values (999.0) to High_Cholesterol and High_BP in 2022 and 2024
+ 
+**M6.T2 — April 6th, 2026, Harmonize Variables Across Years (Lulu)**
+Objective: Align variable names, coding schemes, and missing value handling across BRFSS 2022, 2023, and 2024 prior to merging.
+Context
+A consistent 18-variable schema needed to be applied across all three annual files before concatenation.
+Solution Implemented
+•	Applied consistent rename dictionaries to all three annual DataFrames
+•	Created Year indicator columns (int: 2022, 2023, 2024) for year-stratified analysis
+•	Added placeholder columns for High_Cholesterol and High_BP in 2022 and 2024 (float 999.0)
+•	Resolved _RFDRHV8 to _RFDRHV9 name change via rename dictionary values coded identically
+•	No recoding required all shared variables used identical coding schemes across years
+•	Missing values retained as NaN; no imputation at this stage
+
+**Impact**
+
+All three files share a consistent 18 variable schema. Placeholder strategy distinguishes instrument absence from true non-response. Ready for merge.
+
+
+**M6.T3 concatenate all three harmonized files into one dataframe (Lulu)**
+Merge Datasets
+Objective: Concatenate the three harmonized datasets into a single unified dataframe and validate consistency.
+
+**Context**
+Final merge step after all three files were aligned to the same schema.
+Solution Implemented
+•	Added Year indicator 2022, 2023, 2024 to each dataframe before concatenation
+•	Concatenated 1,336,125 rows x 18 columns
+•	Validated dtypes: 17 float64, 1 int64 (Year)
+•	Exported individual year files: BRFSS22.dta, BRFSS23.dta, BRFSS24.dta
+•	Exported merged dataset as BRFSS_Merged.dta via pyreadstat.write_dta()
+
+**Impact**
+Merged dataset: 1,336,125 records 2022: 445,132; 2023: 433,323; 2024: 457,670. Core variables have zero missing values. Asthma ~85% missing — expected. High_Cholesterol and High_BP placeholder 999 in 2022 and 2024.
+
+**Next Steps**
+•	M6.T4 validate distribution stability and feature consistency across years
+•	Flag High_Cholesterol and High_BP as year conditional for modelling
+
+**M6.T4 — April 14, 2026, Validate Combined Dataset (Lulu)**
+Objective: Check distribution stability and feature consistency across merged BRFSS years before modelling.
+
+**Context**
+Final quality check before the modelling pipeline. Dataset: 1,336,125 records, 18 columns across 2022 and 2023.
+Solution Implemented
+●	Year-by-year proportional distributions computed for all categorical variables groupby + value_counts(normalize=True)
+●	Age, education, income, and physical activity distributions compared across 2022 and 2023
+●	Correlation heatmap on numeric vars (BMI, Height, Weight) BMI/Weight multicollinearity flagged (r = 0.85)
+●	Height and Weight dropped; BMI retained as sole anthropometric predictor
+Temporal / Trend Analysis
+●	Sex stable: Female 53%, Male 47% both years. Diabetes stable: 13.8% both years
+●	Smoking: 12.2% 2022 to 11.0% 2023. Heavy drinking: 6.7% to 5.9% minor, expected variation
+●	Physical activity: 76.0% (2022) to 75.3% (2023) stable
+●	High_Cholesterol and High_BP: zero coverage in 2022,2023 only; flagged as year-conditional
+●	Asthma: ~15% coverage expected BRFSS module structure
+
+**Impact**
+No distribution shifts detected. Multicollinearity resolved. Processed matrix: 1,203,747 rows x 14 features, zero missing values.
+Next Steps
+●	M7.T1  finalise feature set and build preprocessing pipeline
+●	Treat High_Cholesterol and High_BP with caution in pooled models
+
+
 
