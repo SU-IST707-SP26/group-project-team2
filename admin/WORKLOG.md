@@ -587,6 +587,131 @@ Best validation F1 score ≈ **0.432**
 - Experiment with **class-weighted loss functions** instead of SMOTE
 - Perform **feature importance analysis** to reduce noise
 
+
+
+**2026-04-22 - Milestone: Data Cleaning, Feature Engineering, and Diabetes Risk Modeling & Comparative Evaluation (Quispe)**
+
+---
+
+## **Context:**
+This milestone combines end-to-end preprocessing, exploratory analysis, and predictive modeling of diabetes risk using a BRFSS-derived dataset (`df_final.parquet`). The objective was to prepare a clean modeling-ready dataset, explore feature relationships, address class imbalance, and evaluate multiple machine learning approaches for diabetes classification.
+
+---
+
+## **Solution Implemented:**
+
+---
+
+### **1. Data Preparation & Preprocessing**
+
+* Dropped redundant or low-value health-related columns (`_RFBMI5`, `_BMI5`, `WTKG3`, `HTM4`, `_RFDRHV9` where applicable).
+* Removed missing values in target variable `DIABETE_BIN`.
+* Converted BMI variable (`_BMI5`) to standard scale (divided by 100 when present).
+* Imputed remaining missing numeric values using median strategy.
+* Defined feature matrix (`X`) and target (`y`), excluding `DIABETE_BIN`, `DIABETE4`, and `year`.
+* Split dataset into training and testing sets (80/20 stratified split).
+* Standardized features using `StandardScaler`.
+
+**Final dataset shape:**
+* Train: ~954K samples, 10 features  
+* Test: ~238K samples, 10 features  
+
+---
+
+### **2. Exploratory Data Analysis (EDA)**
+
+* **Target distribution:**
+  * Highly imbalanced dataset (~83% non-diabetic, ~17% diabetic).
+
+* **BMI analysis:**
+  * Diabetic individuals show slightly higher BMI distribution.
+  * Significant overlap between classes → weak separability.
+
+* **PCA projection:**
+  * No clear linear separation between diabetic and non-diabetic groups in 2D feature space.
+
+---
+
+### **3. Model Development & Evaluation**
+
+Multiple models were trained using standardized features and evaluated using F1-score, ROC-AUC, precision, and recall.
+
+---
+
+#### **Logistic Regression**
+* F1-score: **0.431**
+* AUC: **0.767**
+* Recall (class 1): **0.72**
+* Observation: High recall but limited precision for diabetes detection.
+
+---
+
+#### **Random Forest**
+* F1-score: **0.434**
+* AUC: **0.775**
+* Recall (class 1): **0.76**
+* Observation: Improved ranking performance compared to logistic regression.
+
+---
+
+#### **XGBoost**
+* F1-score: **0.436**
+* AUC: **0.778**
+* Recall (class 1): **0.76**
+* Observation: Best overall baseline performance among classical models.
+
+---
+
+#### **Threshold Optimization (XGBoost)**
+* Best threshold: ~0.58 (via precision-recall curve)
+* Tuned F1-score: **~0.449**
+* AUC: **0.778**
+* Observation: Threshold tuning improved classification balance without affecting ranking quality.
+
+---
+
+#### **XGBoost + SMOTE**
+* Training set balanced via SMOTE.
+* F1-score: **0.437**
+* AUC: **0.773**
+* Observation: SMOTE did not significantly improve performance over class-weighted approach.
+
+---
+
+#### **Deep Neural Network (DNN - Optuna Initiated)**
+* PyTorch-based architecture and Optuna tuning pipeline were started.
+* Full training and evaluation were not completed in the provided implementation, so final metrics are unavailable.
+
+---
+
+## **4. Key Findings**
+
+* Dataset is highly imbalanced, requiring weighting or sampling strategies.
+* All models show:
+  * High recall for diabetic class (~0.72–0.76)
+  * Low-to-moderate precision (~0.30–0.31), indicating false positive tradeoffs.
+* XGBoost consistently provides the best balance between AUC and F1-score.
+* Feature space shows weak linear separability (confirmed via PCA and BMI overlap).
+* SMOTE does not significantly outperform class-weighted approaches for this dataset.
+
+---
+
+## **Impact:**
+
+* Established a full pipeline from preprocessing to advanced modeling for diabetes risk prediction.
+* Demonstrated that ensemble methods (especially XGBoost) outperform linear models.
+* Identified class imbalance as the primary limitation in improving precision.
+* Introduced threshold tuning as an effective method for improving F1-score.
+* Produced a reproducible baseline for future deep learning extensions.
+
+---
+
+## **Next Steps:**
+
+* Explore calibration methods to improve probability reliability.
+
+
+
 -----
 
 ## 2026-03-05 - Milestone 1: Milestone 1: Data Acquisition & Variable Review (Arakkal)
