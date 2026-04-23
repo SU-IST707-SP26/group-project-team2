@@ -210,6 +210,100 @@ The final dataset contains 1.33M records across three years with balanced year r
 - Address class imbalance before modeling (SMOTE or class weighting).  
 - Proceed to predictive modeling using temporally validated feature set.
 
+## 2026-04-15 – Milestone 7: SMOTE + Optuna-Tuned XGBoost for Diabetes Prediction (Quispe)
+
+### Context:
+Built a predictive model for diabetes risk using the 2024 BRFSS dataset, focusing on handling severe class imbalance and improving model performance through hyperparameter optimization.
+
+---
+
+### Solution Implemented:
+
+#### 1. Data Preparation
+- Loaded cleaned 2024 BRFSS dataset.
+- Removed missing values (`dropna()`).
+- Defined features (11 predictors) by excluding `DIABETE_BIN`, `DIABETE4`, and `year`.
+- Included demographics and health indicators (BMI, age, income, smoking, activity, etc.).
+
+---
+
+#### 2. Train/Test Split
+- Performed 80/20 stratified split to preserve class distribution.
+
+---
+
+#### 3. Class Imbalance Handling (SMOTE)
+- Applied SMOTE only on training data.
+
+**Before SMOTE:**
+- Class 0: 248,805  
+- Class 1: 51,398  
+
+**After SMOTE:**
+- Class 0: 248,805  
+- Class 1: 248,805  
+
+---
+
+#### 4. Baseline Model (XGBoost)
+- Trained XGBClassifier with default parameters.
+
+**Results:**
+- Accuracy: 0.83  
+- Class 1 Precision: 0.51  
+- Class 1 Recall: 0.14  
+- Class 1 F1: 0.23  
+- Macro F1: 0.56  
+
+**Insight:**
+- Strong class imbalance effect remained despite SMOTE.
+
+---
+
+#### 5. Hyperparameter Optimization (Optuna)
+- Tuned XGBoost using Optuna.
+- Optimized for **F1-score (class 1)** across multiple thresholds.
+
+**Best Parameters:**
+- n_estimators: 310  
+- max_depth: 3  
+- learning_rate: 0.105  
+- subsample: 0.67  
+- colsample_bytree: 0.91  
+- min_child_weight: 4  
+- gamma: 1.39  
+
+**Best F1 (Class 1):** 0.438  
+
+---
+
+#### 6. Final Model
+- Retrained model using best parameters.
+- Evaluated on test set.
+
+---
+
+### Key Insights:
+- SMOTE improved balance but not recall sufficiently.
+- Optuna tuning improved minority-class performance but gains are moderate.
+- Model is better suited for **risk scoring than strict classification**.
+
+---
+
+### Impact:
+- End-to-end ML pipeline: SMOTE + XGBoost + Optuna.
+- Improved diabetes prediction over baseline.
+- Highlighted limitations of oversampling for survey-based health data.
+
+---
+
+### Next Steps:
+- Threshold tuning for better recall.
+- Probability calibration (Platt / isotonic).
+- SHAP-based interpretability.
+- Try cost-sensitive learning (`scale_pos_weight`).
+- Test generalization on multi-year BRFSS data.
+
 
 ## 2026-03-05 - Milestone 1: Milestone 1: Data Acquisition & Variable Review (Arakkal)
 
