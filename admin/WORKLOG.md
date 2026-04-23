@@ -304,6 +304,118 @@ Built a predictive model for diabetes risk using the 2024 BRFSS dataset, focusin
 - Try cost-sensitive learning (`scale_pos_weight`).
 - Test generalization on multi-year BRFSS data.
 
+## 2026-04-20 – Milestone 8: Deep Learning (PyTorch DNN) for Diabetes Prediction with Class Imbalance Handling (Quispe)
+
+### Context:
+Built a deep learning pipeline using PyTorch to predict diabetes risk on the full multi-year BRFSS dataset (~1.3M samples). This milestone focuses on feature preprocessing, handling class imbalance, and evaluating a neural network baseline against previous ML models.
+
+---
+
+### Solution Implemented:
+
+#### 1. Data Preparation
+- Loaded unified dataset (`df_final.parquet`) containing multi-year BRFSS records.
+- Removed weak/derived anthropometric variables:
+  - `_RFBMI5`, `WTKG3`, `HTM4`
+- Selected final feature set including:
+  - Demographics (`_AGE_G`, `_SEX`, `_EDUCAG`, `_INCOMG1`)
+  - Health behavior (`_RFSMOK3`, `_RFDRHV9`, `_TOTINDA`)
+  - Clinical indicators (`_BMI5`, `CHCKDNY2`, `_DRDXAR2`)
+- Target variable: `DIABETE_BIN`
+
+---
+
+#### 2. Target Distribution Analysis
+- Severe class imbalance detected:
+  - Class 0 (no diabetes): **83.4%**
+  - Class 1 (diabetes/prediabetes): **16.6%**
+
+This confirmed the need for explicit imbalance handling in model training.
+
+---
+
+#### 3. Data Preprocessing
+- Missing values handled using median imputation.
+- Feature scaling applied using `StandardScaler`.
+- Outlier handling:
+  - Clipping at 1st–99th percentile
+  - Log transform applied to highly skewed features
+
+---
+
+#### 4. Neural Network Architecture (PyTorch DNN)
+- Fully connected feedforward network:
+  - Input → 128 → 64 → 32 → Output
+  - ReLU activations
+  - Dropout (first version) for regularization
+- Output layer: single logit (binary classification)
+
+---
+
+#### 5. Training Strategy
+- Loss function: `BCEWithLogitsLoss`
+- Class imbalance handled using:
+  - `pos_weight = neg / pos`
+- Optimizer: Adam (lr = 3e-4)
+- Batch size: 512
+- Epochs: 5
+- Device: CPU (GPU support attempted but not available in runtime)
+
+---
+
+#### 6. GPU-Optimized Variant (Experimental)
+- Added:
+  - Mixed precision training (`torch.cuda.amp`)
+  - Reduced DataLoader workers for stability
+  - Simplified network (removed dropout)
+- Note: GPU acceleration was disabled due to runtime limitations.
+
+---
+
+### Results:
+
+#### Baseline DNN:
+- Accuracy: **0.6658**
+- ROC AUC: **0.7731**
+- Macro F1: **0.5961**
+
+#### Optimized Training (Clipping + Log + AMP setup):
+- Accuracy: **0.6614**
+- ROC AUC: **0.7737**
+- Macro F1: **0.5937**
+
+---
+
+### Key Insights:
+- Deep learning model achieved strong **ranking performance (ROC AUC ~0.77)** despite class imbalance.
+- Class weighting (`pos_weight`) was sufficient to stabilize training without SMOTE.
+- Feature engineering (clipping + log transform) improved convergence stability.
+- Neural network performance is competitive with XGBoost but not significantly superior on tabular structured data.
+
+---
+
+### Impact:
+- Established a scalable PyTorch pipeline for 1.3M-row healthcare dataset.
+- Demonstrated that:
+  - Proper preprocessing > model complexity for tabular medical data
+  - DNNs provide stable AUC but limited gains over gradient boosting
+- Added GPU-ready training framework for future scaling.
+
+---
+
+### Next Steps:
+- Move training to full GPU environment (CUDA-enabled runtime).
+- Compare directly against:
+  - XGBoost (SMOTE + Optuna)
+  - CatBoost / LightGBM baselines
+- Explore:
+  - Focal loss (better imbalance handling)
+  - Threshold optimization for recall improvement
+  - Feature selection via SHAP or permutation importance
+- Test deeper architectures or embeddings for categorical variables.
+
+
+-----
 
 ## 2026-03-05 - Milestone 1: Milestone 1: Data Acquisition & Variable Review (Arakkal)
 
