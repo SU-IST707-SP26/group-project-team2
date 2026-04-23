@@ -407,7 +407,7 @@ This confirmed the need for explicit imbalance handling in model training.
 - Compare directly against:
   - XGBoost (SMOTE + Optuna)
 
-## 2026-04-21 – Milestone: Deep Learning Model Training & Pipeline Optimization for BRFSS Diabetes Prediction (Quispe)
+## 2026-04-21 – Milestone 9: Deep Learning Model Training & Pipeline Optimization for BRFSS Diabetes Prediction (Quispe)
 
 ### Context:
 Built and trained a deep learning (DNN) model for diabetes prediction using the unified BRFSS multi-year dataset (`df_final.parquet`). This milestone focused on implementing a full PyTorch machine learning pipeline with preprocessing improvements, class imbalance handling, and robust model evaluation.
@@ -488,7 +488,7 @@ The model demonstrates strong ranking ability (ROC AUC ≈ 0.77), indicating goo
 - Perform hyperparameter tuning (architecture depth, dropout, learning rate scheduling)
 - Optimize decision threshold to improve F1 score
 
-## 2026-04-22 – Milestone: Deep Learning Model Development for Diabetes Prediction with Hyperparameter Optimization (SMOTE + Optuna) (Quispe)
+## 2026-04-22 – Milestone 9: Deep Learning Model Development for Diabetes Prediction with Hyperparameter Optimization (SMOTE + Optuna) (Quispe)
 
 ### Context:
 A deep learning pipeline was developed to predict diabetes status (`DIABETE_BIN`) using BRFSS-derived health survey data. The dataset exhibits significant class imbalance and required preprocessing, resampling, and hyperparameter optimization to improve predictive performance.
