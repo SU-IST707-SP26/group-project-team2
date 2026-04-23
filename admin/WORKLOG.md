@@ -404,15 +404,89 @@ This confirmed the need for explicit imbalance handling in model training.
 ---
 
 ### Next Steps:
-- Move training to full GPU environment (CUDA-enabled runtime).
 - Compare directly against:
   - XGBoost (SMOTE + Optuna)
-  - CatBoost / LightGBM baselines
-- Explore:
-  - Focal loss (better imbalance handling)
-  - Threshold optimization for recall improvement
-  - Feature selection via SHAP or permutation importance
-- Test deeper architectures or embeddings for categorical variables.
+
+## 2026-04-21 – Milestone: Deep Learning Model Training & Pipeline Optimization for BRFSS Diabetes Prediction (Quispe)
+
+### Context:
+Built and trained a deep learning (DNN) model for diabetes prediction using the unified BRFSS multi-year dataset (`df_final.parquet`). This milestone focused on implementing a full PyTorch machine learning pipeline with preprocessing improvements, class imbalance handling, and robust model evaluation.
+
+---
+
+### Solution Implemented:
+
+- Removed redundant/noisy physical measurement features:
+  - `_RFBMI5`, `WTKG3`, `HTM4`
+- Handled missing data:
+  - Dropped rows with missing target (`DIABETE_BIN`)
+  - Applied median imputation for feature missing values
+- Applied quantile-based clipping (1st–99th percentile) to reduce outlier influence.
+- Standardized features using `StandardScaler` for stable neural network training.
+- Encoded and normalized `year` feature for temporal consistency.
+- Split dataset into train/test sets using stratified sampling to preserve class balance.
+- Built PyTorch `Dataset` and `DataLoader` for scalable batch processing.
+
+---
+
+### Model Architecture:
+
+- Fully connected Deep Neural Network (DNN):
+  - Input → 256 → 128 → 64 → 32 → 16 → Output
+  - ReLU activation functions
+  - Dropout (0.2) for regularization
+- Loss function: `BCEWithLogitsLoss`
+- Class imbalance handling via `pos_weight`
+- Optimizer: Adam (learning rate = 0.0003)
+- Training: 5 epochs, batch size = 1024
+
+---
+
+### Evaluation Results:
+
+- Class distribution:
+  - No diabetes: **83.44%**
+  - Diabetes / prediabetes: **16.56%**
+
+- Test performance:
+  - Accuracy: **0.6658**
+  - ROC AUC: **0.7738**
+  - F1 Macro: **0.5964**
+
+- Training behavior:
+  - Loss decreased steadily from ~0.9677 to ~0.9500
+  - Stable convergence observed across epochs
+
+---
+
+### Interpretability & Monitoring:
+
+- Integrated TensorBoard for model visualization and tracking.
+- Logged computation graph of the neural network architecture.
+- Saved artifacts for reproducibility:
+  - Trained model (`diabetes_model.pt`)
+  - Feature scaler (`scaler.pkl`)
+
+---
+
+### Impact:
+
+This milestone improved the diabetes prediction pipeline by:
+
+- Reducing noise via feature pruning and outlier handling
+- Improving training stability through normalization and scaling
+- Addressing severe class imbalance using weighted loss
+- Enabling reproducibility with saved preprocessing and model artifacts
+
+The model demonstrates strong ranking ability (ROC AUC ≈ 0.77), indicating good separation between classes, though classification performance (F1 ≈ 0.59) remains limited due to dataset imbalance.
+
+---
+
+### Next Steps:
+
+- Apply advanced imbalance techniques (SMOTE, focal loss, or hybrid sampling)
+- Perform hyperparameter tuning (architecture depth, dropout, learning rate scheduling)
+- Optimize decision threshold to improve F1 score
 
 
 -----
