@@ -488,6 +488,104 @@ The model demonstrates strong ranking ability (ROC AUC ≈ 0.77), indicating goo
 - Perform hyperparameter tuning (architecture depth, dropout, learning rate scheduling)
 - Optimize decision threshold to improve F1 score
 
+## 2026-04-22 – Milestone: Deep Learning Model Development for Diabetes Prediction with Hyperparameter Optimization (SMOTE + Optuna) (Quispe)
+
+### Context:
+A deep learning pipeline was developed to predict diabetes status (`DIABETE_BIN`) using BRFSS-derived health survey data. The dataset exhibits significant class imbalance and required preprocessing, resampling, and hyperparameter optimization to improve predictive performance.
+
+---
+
+### Solution Implemented:
+
+- Loaded processed BRFSS dataset (`df_final.parquet`) for binary classification.
+- Removed low-relevance or redundant features: `_RFBMI5`, `WTKG3`, `HTM4`.
+- Handled missing values:
+  - Dropped rows with missing target (`DIABETE_BIN`)
+  - Applied median imputation for numerical features
+- Engineered temporal feature:
+  - Converted `year` to integer and normalized by subtracting minimum year
+- Split dataset into:
+  - 80% training / 20% testing using stratified sampling
+- Applied feature scaling using `StandardScaler`
+  - Saved as `scaler.pkl`
+  - Saved feature order as `feature_columns.pkl`
+
+---
+
+### Class Imbalance Handling:
+
+- Applied **SMOTE (Synthetic Minority Oversampling Technique)** to training data:
+  - Before SMOTE: `[882842, 175186]`
+  - After SMOTE: `[882842, 882842]`
+- Ensured balanced training distribution for improved model learning
+
+---
+
+### Model Architecture:
+
+- Feedforward Deep Neural Network (PyTorch)
+  - Input layer: full feature vector
+  - Hidden Layer 1: 128 neurons + ReLU + Dropout (0.3)
+  - Hidden Layer 2: 64 neurons + ReLU + Dropout (0.2)
+  - Output layer: 1 neuron (logit output)
+- Loss function: `BCEWithLogitsLoss`
+- Optimizer: Adam (weight decay included)
+- Learning rate scheduler: OneCycleLR
+
+---
+
+### Training Configuration:
+
+- Epochs: 30
+- Batch size: 128
+- Training loss stabilized around ~0.565 after convergence
+
+---
+
+### Hyperparameter Optimization (Optuna):
+
+- Trials conducted: 30
+- Objective: Maximize F1 score on validation set
+
+#### Best Hyperparameters:
+- Hidden layer 1: 127
+- Hidden layer 2: 77
+- Dropout: 0.3588
+- Learning rate: 0.0003938
+- Weight decay: 0.000324
+- Batch size: 256
+
+Best validation F1 score ≈ **0.432**
+
+---
+
+### Evaluation Results:
+
+#### Threshold Optimization:
+- Optimal decision threshold (from Precision-Recall curve): **0.5825–0.5919 range**
+
+#### Final Test Metrics:
+- Accuracy: **0.7463**
+- ROC AUC: **0.7741**
+- F1 Score: **0.4427**
+
+---
+
+### Impact:
+
+- The model demonstrates **strong ranking performance (ROC AUC ~0.77)**, indicating good separation capability between classes.
+- Moderate **F1 score (~0.44)** reflects persistent class imbalance challenges even after SMOTE.
+- Hyperparameter tuning improved stability and slightly boosted F1 performance.
+- Final pipeline is fully reproducible with saved scaler, feature mapping, model weights, and threshold.
+
+
+
+---
+
+### Next Steps:
+
+- Experiment with **class-weighted loss functions** instead of SMOTE
+- Perform **feature importance analysis** to reduce noise
 
 -----
 
