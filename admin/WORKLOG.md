@@ -400,3 +400,62 @@ Work Completed- Review metadata and compare with 2024 structure
 •	Documented variables that appear consistently across all years Diabetes, Asthma, Kidney Disease, Arthritis.
 •	Identified variables present in earlier years but missing in 2024 like Hypertension and Cholesterol and heavydrinker 2023 dataset.
 
+ **April 22nd 2026 - Data Preprocessing, Feature Engineering & Model Evaluation (Arakkal & Lulu)**
+
+**Context:**
+The BRFSS dataset contains encoded survey responses, redundant variables, and class imbalance. To build an effective diabetes prediction model, it was necessary to clean the data, transform variables into meaningful formats, remove multicollinearity, and evaluate robust machine learning models.
+
+ **Solution Implemented:**
+ • Feature Selection & Data Preparation
+ •	Selected relevant variables: 
+   	• Age, Sex, BMI, Physical Activity, Smoking, Alcohol, Education, Income, and Chronic Diseases 
+•	Removed irrelevant and redundant features to focus on meaningful predictors 
+
+• Variable Renaming & Transformation
+•	Renamed encoded variables into human-readable form (e.g., _BMI5 → BMI, _RFSMOK3 → Smoker) 
+•	Converted categorical codes into meaningful labels: 
+  • Income & Education → Ordered categories 
+  • Binary variables → Yes/No format 
+•	Ensured all categorical variables are interpretable and structured
+
+• Correlation Analysis & Feature Reduction
+•	Performed correlation analysis on numeric variables (BMI, Height, Weight) 
+•	Identified strong multicollinearity: 
+ •  BMI & Weight → r = 0.85 
+•	Dropped Height and Weight, retaining BMI as a representative feature 
+
+• Data Preprocessing Pipeline
+•	Built pipelines using Pipeline and ColumnTransformer: 
+  • Ordinal: Imputation + Ordered Encoding 
+  • Binary: Imputation + Encoding 
+	• Numeric: Mean Imputation + StandardScaler 
+•	Applied transformations consistently to avoid data leakage 
+• Data Splitting & Target Encoding
+•	Split dataset into 80% training / 20% testing (stratified) 
+•	Encoded target variable (Diabetes) using LabelEncoder 
+•	Removed rows with missing target values
+
+• Handling Class Imbalance
+•	Applied SMOTETomek on training data: 
+o	Balanced both classes: 
+  • Class 0: 288,268 
+  • Class 1: 288,268 
+•	Improved model learning for minority class 
+
+• Model Development & Evaluation
+•	Random Forest 
+  • Macro F1: 0.60 
+  • Recall: 0.70 
+  • Strength: Good class separation and robustness 
+•	XGBoost 
+  • Macro F1: 0.60 
+  • Recall: 0.76 
+  • Strength: Best balance between precision and recall
+
+**Impact:**
+•	Produced a clean, structured, and model-ready dataset 
+•	Eliminated multicollinearity, improving model stability 
+•	Ensured reproducibility through pipeline-based preprocessing 
+•	Addressed class imbalance, improving fairness and sensitivity 
+•	Identified XGBoost as the best-performing model, offering strong recall while maintaining balanced performance 
+•	Established a reliable foundation for real-world diabetes risk prediction 
