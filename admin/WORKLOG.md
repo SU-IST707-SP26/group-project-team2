@@ -210,6 +210,509 @@ The final dataset contains 1.33M records across three years with balanced year r
 - Address class imbalance before modeling (SMOTE or class weighting).  
 - Proceed to predictive modeling using temporally validated feature set.
 
+## 2026-04-15 – Milestone 7: SMOTE + Optuna-Tuned XGBoost for Diabetes Prediction (Quispe)
+
+### Context:
+Built a predictive model for diabetes risk using the 2024 BRFSS dataset, focusing on handling severe class imbalance and improving model performance through hyperparameter optimization.
+
+---
+
+### Solution Implemented:
+
+#### 1. Data Preparation
+- Loaded cleaned 2024 BRFSS dataset.
+- Removed missing values (`dropna()`).
+- Defined features (11 predictors) by excluding `DIABETE_BIN`, `DIABETE4`, and `year`.
+- Included demographics and health indicators (BMI, age, income, smoking, activity, etc.).
+
+---
+
+#### 2. Train/Test Split
+- Performed 80/20 stratified split to preserve class distribution.
+
+---
+
+#### 3. Class Imbalance Handling (SMOTE)
+- Applied SMOTE only on training data.
+
+**Before SMOTE:**
+- Class 0: 248,805  
+- Class 1: 51,398  
+
+**After SMOTE:**
+- Class 0: 248,805  
+- Class 1: 248,805  
+
+---
+
+#### 4. Baseline Model (XGBoost)
+- Trained XGBClassifier with default parameters.
+
+**Results:**
+- Accuracy: 0.83  
+- Class 1 Precision: 0.51  
+- Class 1 Recall: 0.14  
+- Class 1 F1: 0.23  
+- Macro F1: 0.56  
+
+**Insight:**
+- Strong class imbalance effect remained despite SMOTE.
+
+---
+
+#### 5. Hyperparameter Optimization (Optuna)
+- Tuned XGBoost using Optuna.
+- Optimized for **F1-score (class 1)** across multiple thresholds.
+
+**Best Parameters:**
+- n_estimators: 310  
+- max_depth: 3  
+- learning_rate: 0.105  
+- subsample: 0.67  
+- colsample_bytree: 0.91  
+- min_child_weight: 4  
+- gamma: 1.39  
+
+**Best F1 (Class 1):** 0.438  
+
+---
+
+#### 6. Final Model
+- Retrained model using best parameters.
+- Evaluated on test set.
+
+---
+
+### Key Insights:
+- SMOTE improved balance but not recall sufficiently.
+- Optuna tuning improved minority-class performance but gains are moderate.
+- Model is better suited for **risk scoring than strict classification**.
+
+---
+
+### Impact:
+- End-to-end ML pipeline: SMOTE + XGBoost + Optuna.
+- Improved diabetes prediction over baseline.
+- Highlighted limitations of oversampling for survey-based health data.
+
+---
+
+### Next Steps:
+- Threshold tuning for better recall.
+- Probability calibration (Platt / isotonic).
+- SHAP-based interpretability.
+- Try cost-sensitive learning (`scale_pos_weight`).
+- Test generalization on multi-year BRFSS data.
+
+## 2026-04-20 – Milestone 8: Deep Learning (PyTorch DNN) for Diabetes Prediction with Class Imbalance Handling (Quispe)
+
+### Context:
+Built a deep learning pipeline using PyTorch to predict diabetes risk on the full multi-year BRFSS dataset (~1.3M samples). This milestone focuses on feature preprocessing, handling class imbalance, and evaluating a neural network baseline against previous ML models.
+
+---
+
+### Solution Implemented:
+
+#### 1. Data Preparation
+- Loaded unified dataset (`df_final.parquet`) containing multi-year BRFSS records.
+- Removed weak/derived anthropometric variables:
+  - `_RFBMI5`, `WTKG3`, `HTM4`
+- Selected final feature set including:
+  - Demographics (`_AGE_G`, `_SEX`, `_EDUCAG`, `_INCOMG1`)
+  - Health behavior (`_RFSMOK3`, `_RFDRHV9`, `_TOTINDA`)
+  - Clinical indicators (`_BMI5`, `CHCKDNY2`, `_DRDXAR2`)
+- Target variable: `DIABETE_BIN`
+
+---
+
+#### 2. Target Distribution Analysis
+- Severe class imbalance detected:
+  - Class 0 (no diabetes): **83.4%**
+  - Class 1 (diabetes/prediabetes): **16.6%**
+
+This confirmed the need for explicit imbalance handling in model training.
+
+---
+
+#### 3. Data Preprocessing
+- Missing values handled using median imputation.
+- Feature scaling applied using `StandardScaler`.
+- Outlier handling:
+  - Clipping at 1st–99th percentile
+  - Log transform applied to highly skewed features
+
+---
+
+#### 4. Neural Network Architecture (PyTorch DNN)
+- Fully connected feedforward network:
+  - Input → 128 → 64 → 32 → Output
+  - ReLU activations
+  - Dropout (first version) for regularization
+- Output layer: single logit (binary classification)
+
+---
+
+#### 5. Training Strategy
+- Loss function: `BCEWithLogitsLoss`
+- Class imbalance handled using:
+  - `pos_weight = neg / pos`
+- Optimizer: Adam (lr = 3e-4)
+- Batch size: 512
+- Epochs: 5
+- Device: CPU (GPU support attempted but not available in runtime)
+
+---
+
+#### 6. GPU-Optimized Variant (Experimental)
+- Added:
+  - Mixed precision training (`torch.cuda.amp`)
+  - Reduced DataLoader workers for stability
+  - Simplified network (removed dropout)
+- Note: GPU acceleration was disabled due to runtime limitations.
+
+---
+
+### Results:
+
+#### Baseline DNN:
+- Accuracy: **0.6658**
+- ROC AUC: **0.7731**
+- Macro F1: **0.5961**
+
+#### Optimized Training (Clipping + Log + AMP setup):
+- Accuracy: **0.6614**
+- ROC AUC: **0.7737**
+- Macro F1: **0.5937**
+
+---
+
+### Key Insights:
+- Deep learning model achieved strong **ranking performance (ROC AUC ~0.77)** despite class imbalance.
+- Class weighting (`pos_weight`) was sufficient to stabilize training without SMOTE.
+- Feature engineering (clipping + log transform) improved convergence stability.
+- Neural network performance is competitive with XGBoost but not significantly superior on tabular structured data.
+
+---
+
+### Impact:
+- Established a scalable PyTorch pipeline for 1.3M-row healthcare dataset.
+- Demonstrated that:
+  - Proper preprocessing > model complexity for tabular medical data
+  - DNNs provide stable AUC but limited gains over gradient boosting
+- Added GPU-ready training framework for future scaling.
+
+---
+
+### Next Steps:
+- Compare directly against:
+  - XGBoost (SMOTE + Optuna)
+
+## 2026-04-21 – Milestone 9: Deep Learning Model Training & Pipeline Optimization for BRFSS Diabetes Prediction (Quispe)
+
+### Context:
+Built and trained a deep learning (DNN) model for diabetes prediction using the unified BRFSS multi-year dataset (`df_final.parquet`). This milestone focused on implementing a full PyTorch machine learning pipeline with preprocessing improvements, class imbalance handling, and robust model evaluation.
+
+---
+
+### Solution Implemented:
+
+- Removed redundant/noisy physical measurement features:
+  - `_RFBMI5`, `WTKG3`, `HTM4`
+- Handled missing data:
+  - Dropped rows with missing target (`DIABETE_BIN`)
+  - Applied median imputation for feature missing values
+- Applied quantile-based clipping (1st–99th percentile) to reduce outlier influence.
+- Standardized features using `StandardScaler` for stable neural network training.
+- Encoded and normalized `year` feature for temporal consistency.
+- Split dataset into train/test sets using stratified sampling to preserve class balance.
+- Built PyTorch `Dataset` and `DataLoader` for scalable batch processing.
+
+---
+
+### Model Architecture:
+
+- Fully connected Deep Neural Network (DNN):
+  - Input → 256 → 128 → 64 → 32 → 16 → Output
+  - ReLU activation functions
+  - Dropout (0.2) for regularization
+- Loss function: `BCEWithLogitsLoss`
+- Class imbalance handling via `pos_weight`
+- Optimizer: Adam (learning rate = 0.0003)
+- Training: 5 epochs, batch size = 1024
+
+---
+
+### Evaluation Results:
+
+- Class distribution:
+  - No diabetes: **83.44%**
+  - Diabetes / prediabetes: **16.56%**
+
+- Test performance:
+  - Accuracy: **0.6658**
+  - ROC AUC: **0.7738**
+  - F1 Macro: **0.5964**
+
+- Training behavior:
+  - Loss decreased steadily from ~0.9677 to ~0.9500
+  - Stable convergence observed across epochs
+
+---
+
+### Interpretability & Monitoring:
+
+- Integrated TensorBoard for model visualization and tracking.
+- Logged computation graph of the neural network architecture.
+- Saved artifacts for reproducibility:
+  - Trained model (`diabetes_model.pt`)
+  - Feature scaler (`scaler.pkl`)
+
+---
+
+### Impact:
+
+This milestone improved the diabetes prediction pipeline by:
+
+- Reducing noise via feature pruning and outlier handling
+- Improving training stability through normalization and scaling
+- Addressing severe class imbalance using weighted loss
+- Enabling reproducibility with saved preprocessing and model artifacts
+
+The model demonstrates strong ranking ability (ROC AUC ≈ 0.77), indicating good separation between classes, though classification performance (F1 ≈ 0.59) remains limited due to dataset imbalance.
+
+---
+
+### Next Steps:
+
+- Apply advanced imbalance techniques (SMOTE, focal loss, or hybrid sampling)
+- Perform hyperparameter tuning (architecture depth, dropout, learning rate scheduling)
+- Optimize decision threshold to improve F1 score
+
+## 2026-04-22 – Milestone 9: Deep Learning Model Development for Diabetes Prediction with Hyperparameter Optimization (SMOTE + Optuna) (Quispe)
+
+### Context:
+A deep learning pipeline was developed to predict diabetes status (`DIABETE_BIN`) using BRFSS-derived health survey data. The dataset exhibits significant class imbalance and required preprocessing, resampling, and hyperparameter optimization to improve predictive performance.
+
+---
+
+### Solution Implemented:
+
+- Loaded processed BRFSS dataset (`df_final.parquet`) for binary classification.
+- Removed low-relevance or redundant features: `_RFBMI5`, `WTKG3`, `HTM4`.
+- Handled missing values:
+  - Dropped rows with missing target (`DIABETE_BIN`)
+  - Applied median imputation for numerical features
+- Engineered temporal feature:
+  - Converted `year` to integer and normalized by subtracting minimum year
+- Split dataset into:
+  - 80% training / 20% testing using stratified sampling
+- Applied feature scaling using `StandardScaler`
+  - Saved as `scaler.pkl`
+  - Saved feature order as `feature_columns.pkl`
+
+---
+
+### Class Imbalance Handling:
+
+- Applied **SMOTE (Synthetic Minority Oversampling Technique)** to training data:
+  - Before SMOTE: `[882842, 175186]`
+  - After SMOTE: `[882842, 882842]`
+- Ensured balanced training distribution for improved model learning
+
+---
+
+### Model Architecture:
+
+- Feedforward Deep Neural Network (PyTorch)
+  - Input layer: full feature vector
+  - Hidden Layer 1: 128 neurons + ReLU + Dropout (0.3)
+  - Hidden Layer 2: 64 neurons + ReLU + Dropout (0.2)
+  - Output layer: 1 neuron (logit output)
+- Loss function: `BCEWithLogitsLoss`
+- Optimizer: Adam (weight decay included)
+- Learning rate scheduler: OneCycleLR
+
+---
+
+### Training Configuration:
+
+- Epochs: 30
+- Batch size: 128
+- Training loss stabilized around ~0.565 after convergence
+
+---
+
+### Hyperparameter Optimization (Optuna):
+
+- Trials conducted: 30
+- Objective: Maximize F1 score on validation set
+
+#### Best Hyperparameters:
+- Hidden layer 1: 127
+- Hidden layer 2: 77
+- Dropout: 0.3588
+- Learning rate: 0.0003938
+- Weight decay: 0.000324
+- Batch size: 256
+
+Best validation F1 score ≈ **0.432**
+
+---
+
+### Evaluation Results:
+
+#### Threshold Optimization:
+- Optimal decision threshold (from Precision-Recall curve): **0.5825–0.5919 range**
+
+#### Final Test Metrics:
+- Accuracy: **0.7463**
+- ROC AUC: **0.7741**
+- F1 Score: **0.4427**
+
+---
+
+### Impact:
+
+- The model demonstrates **strong ranking performance (ROC AUC ~0.77)**, indicating good separation capability between classes.
+- Moderate **F1 score (~0.44)** reflects persistent class imbalance challenges even after SMOTE.
+- Hyperparameter tuning improved stability and slightly boosted F1 performance.
+- Final pipeline is fully reproducible with saved scaler, feature mapping, model weights, and threshold.
+
+
+
+---
+
+### Next Steps:
+
+- Experiment with **class-weighted loss functions** instead of SMOTE
+- Perform **feature importance analysis** to reduce noise
+
+
+
+**2026-04-22 - Milestone: Data Cleaning, Feature Engineering, and Diabetes Risk Modeling & Comparative Evaluation (Quispe)**
+
+---
+
+## **Context:**
+This milestone combines end-to-end preprocessing, exploratory analysis, and predictive modeling of diabetes risk using a BRFSS-derived dataset (`df_final.parquet`). The objective was to prepare a clean modeling-ready dataset, explore feature relationships, address class imbalance, and evaluate multiple machine learning approaches for diabetes classification.
+
+---
+
+## **Solution Implemented:**
+
+---
+
+### **1. Data Preparation & Preprocessing**
+
+* Dropped redundant or low-value health-related columns (`_RFBMI5`, `_BMI5`, `WTKG3`, `HTM4`, `_RFDRHV9` where applicable).
+* Removed missing values in target variable `DIABETE_BIN`.
+* Converted BMI variable (`_BMI5`) to standard scale (divided by 100 when present).
+* Imputed remaining missing numeric values using median strategy.
+* Defined feature matrix (`X`) and target (`y`), excluding `DIABETE_BIN`, `DIABETE4`, and `year`.
+* Split dataset into training and testing sets (80/20 stratified split).
+* Standardized features using `StandardScaler`.
+
+**Final dataset shape:**
+* Train: ~954K samples, 10 features  
+* Test: ~238K samples, 10 features  
+
+---
+
+### **2. Exploratory Data Analysis (EDA)**
+
+* **Target distribution:**
+  * Highly imbalanced dataset (~83% non-diabetic, ~17% diabetic).
+
+* **BMI analysis:**
+  * Diabetic individuals show slightly higher BMI distribution.
+  * Significant overlap between classes → weak separability.
+
+* **PCA projection:**
+  * No clear linear separation between diabetic and non-diabetic groups in 2D feature space.
+
+---
+
+### **3. Model Development & Evaluation**
+
+Multiple models were trained using standardized features and evaluated using F1-score, ROC-AUC, precision, and recall.
+
+---
+
+#### **Logistic Regression**
+* F1-score: **0.431**
+* AUC: **0.767**
+* Recall (class 1): **0.72**
+* Observation: High recall but limited precision for diabetes detection.
+
+---
+
+#### **Random Forest**
+* F1-score: **0.434**
+* AUC: **0.775**
+* Recall (class 1): **0.76**
+* Observation: Improved ranking performance compared to logistic regression.
+
+---
+
+#### **XGBoost**
+* F1-score: **0.436**
+* AUC: **0.778**
+* Recall (class 1): **0.76**
+* Observation: Best overall baseline performance among classical models.
+
+---
+
+#### **Threshold Optimization (XGBoost)**
+* Best threshold: ~0.58 (via precision-recall curve)
+* Tuned F1-score: **~0.449**
+* AUC: **0.778**
+* Observation: Threshold tuning improved classification balance without affecting ranking quality.
+
+---
+
+#### **XGBoost + SMOTE**
+* Training set balanced via SMOTE.
+* F1-score: **0.437**
+* AUC: **0.773**
+* Observation: SMOTE did not significantly improve performance over class-weighted approach.
+
+---
+
+#### **Deep Neural Network (DNN - Optuna Initiated)**
+* PyTorch-based architecture and Optuna tuning pipeline were started.
+* Full training and evaluation were not completed in the provided implementation, so final metrics are unavailable.
+
+---
+
+## **4. Key Findings**
+
+* Dataset is highly imbalanced, requiring weighting or sampling strategies.
+* All models show:
+  * High recall for diabetic class (~0.72–0.76)
+  * Low-to-moderate precision (~0.30–0.31), indicating false positive tradeoffs.
+* XGBoost consistently provides the best balance between AUC and F1-score.
+* Feature space shows weak linear separability (confirmed via PCA and BMI overlap).
+* SMOTE does not significantly outperform class-weighted approaches for this dataset.
+
+---
+
+## **Impact:**
+
+* Established a full pipeline from preprocessing to advanced modeling for diabetes risk prediction.
+* Demonstrated that ensemble methods (especially XGBoost) outperform linear models.
+* Identified class imbalance as the primary limitation in improving precision.
+* Introduced threshold tuning as an effective method for improving F1-score.
+* Produced a reproducible baseline for future deep learning extensions.
+
+---
+
+## **Next Steps:**
+
+* Explore calibration methods to improve probability reliability.
+
+
+
+-----
 
 ## 2026-03-05 - Milestone 1: Milestone 1: Data Acquisition & Variable Review (Arakkal)
 
@@ -392,13 +895,86 @@ The target variable (Obese) is imbalanced, and initial inclusion of BMI introduc
 - Perform feature importance analysis for interpretability  
 
 ________________________________________
-**Milston6.Task1- April 2nd 2026 — Acquire additional dataset (Lulu) **
-Work Completed- Review metadata and compare with 2024 structure
-•	Retrieved and loaded additional BRFSS datasets 2023.
-•	Reviewed metadata for each year, focusing on variable names, labels, coding schemes, and module availability.
-•	Compared the 2023 metadata against the 2024 BRFSS structure to identify structural differences.
-•	Documented variables that appear consistently across all years Diabetes, Asthma, Kidney Disease, Arthritis.
-•	Identified variables present in earlier years but missing in 2024 like Hypertension and Cholesterol and heavydrinker 2023 dataset.
+**M6.T1 April 2nd 2026 — Acquire Additional Dataset(Lulu)**
+ 
+Objective: Download and organize BRFSS 2022, 2023, and 2024 raw datasets and codebooks for cross-year harmonization.
+
+**Context**
+Raw survey files for 2023 and 2024 needed to be downloaded and organized alongside the existing 2022 dataset before harmonization.
+Solution Implemented
+•	Downloaded BRFSS 2023 (brfss2023_part1.parquet.gzip, brfss2023_part2.parquet.gzip) and 2022 raw survey data
+•	Reviewed codebooks identified heavy drinking variable name change: _RFDRHV8 (2022/2023) to _RFDRHV9 (2024)
+•	Confirmed shared 14 variable core set across all three years
+•	Identified High_Cholesterol (TOLDHI3) and High_BP (BPMEDS1) available in 2023 only absent from 2022 and 2024
+•	Organized all raw files in shared repository under Output/
+
+**Impact**
+All raw data secured. Variable naming issues and structural gaps (High_Cholesterol, High_BP) identified early.
+Next Steps
+•	M6.T2 harmonize variable names, labels, and coding schemes
+•	Assign placeholder values (999.0) to High_Cholesterol and High_BP in 2022 and 2024
+ 
+**M6.T2 — April 6th, 2026, Harmonize Variables Across Years (Lulu)**
+Objective: Align variable names, coding schemes, and missing value handling across BRFSS 2022, 2023, and 2024 prior to merging.
+Context
+A consistent 18-variable schema needed to be applied across all three annual files before concatenation.
+Solution Implemented
+•	Applied consistent rename dictionaries to all three annual DataFrames
+•	Created Year indicator columns (int: 2022, 2023, 2024) for year-stratified analysis
+•	Added placeholder columns for High_Cholesterol and High_BP in 2022 and 2024 (float 999.0)
+•	Resolved _RFDRHV8 to _RFDRHV9 name change via rename dictionary values coded identically
+•	No recoding required all shared variables used identical coding schemes across years
+•	Missing values retained as NaN; no imputation at this stage
+
+**Impact**
+
+All three files share a consistent 18 variable schema. Placeholder strategy distinguishes instrument absence from true non-response. Ready for merge.
+
+
+**M6.T3 concatenate all three harmonized files into one dataframe (Lulu)**
+Merge Datasets
+Objective: Concatenate the three harmonized datasets into a single unified dataframe and validate consistency.
+
+**Context**
+Final merge step after all three files were aligned to the same schema.
+Solution Implemented
+•	Added Year indicator 2022, 2023, 2024 to each dataframe before concatenation
+•	Concatenated 1,336,125 rows x 18 columns
+•	Validated dtypes: 17 float64, 1 int64 (Year)
+•	Exported individual year files: BRFSS22.dta, BRFSS23.dta, BRFSS24.dta
+•	Exported merged dataset as BRFSS_Merged.dta via pyreadstat.write_dta()
+
+**Impact**
+Merged dataset: 1,336,125 records 2022: 445,132; 2023: 433,323; 2024: 457,670. Core variables have zero missing values. Asthma ~85% missing — expected. High_Cholesterol and High_BP placeholder 999 in 2022 and 2024.
+
+**Next Steps**
+•	M6.T4 validate distribution stability and feature consistency across years
+•	Flag High_Cholesterol and High_BP as year conditional for modelling
+
+**M6.T4 — April 14, 2026, Validate Combined Dataset (Lulu)**
+Objective: Check distribution stability and feature consistency across merged BRFSS years before modelling.
+
+**Context**
+Final quality check before the modelling pipeline. Dataset: 1,336,125 records, 18 columns across 2022 and 2023.
+Solution Implemented
+●	Year-by-year proportional distributions computed for all categorical variables groupby + value_counts(normalize=True)
+●	Age, education, income, and physical activity distributions compared across 2022 and 2023
+●	Correlation heatmap on numeric vars (BMI, Height, Weight) BMI/Weight multicollinearity flagged (r = 0.85)
+●	Height and Weight dropped; BMI retained as sole anthropometric predictor
+Temporal / Trend Analysis
+●	Sex stable: Female 53%, Male 47% both years. Diabetes stable: 13.8% both years
+●	Smoking: 12.2% 2022 to 11.0% 2023. Heavy drinking: 6.7% to 5.9% minor, expected variation
+●	Physical activity: 76.0% (2022) to 75.3% (2023) stable
+●	High_Cholesterol and High_BP: zero coverage in 2022,2023 only; flagged as year-conditional
+●	Asthma: ~15% coverage expected BRFSS module structure
+
+**Impact**
+No distribution shifts detected. Multicollinearity resolved. Processed matrix: 1,203,747 rows x 14 features, zero missing values.
+Next Steps
+●	M7.T1  finalise feature set and build preprocessing pipeline
+●	Treat High_Cholesterol and High_BP with caution in pooled models
+
+
 
  **April 22nd 2026 - Data Preprocessing, Feature Engineering & Model Evaluation (Arakkal & Lulu)**
 
