@@ -975,8 +975,8 @@ Next Steps
 ●	Treat High_Cholesterol and High_BP with caution in pooled models
 
 
+**April 22nd 2026 - Data Preprocessing, Feature Engineering & Model Evaluation (Arakkal & Lulu)**
 
- **April 22nd 2026 - Data Preprocessing, Feature Engineering & Model Evaluation (Arakkal & Lulu)**
 
 **Context:**
 The BRFSS dataset contains encoded survey responses, redundant variables, and class imbalance. To build an effective diabetes prediction model, it was necessary to clean the data, transform variables into meaningful formats, remove multicollinearity, and evaluate robust machine learning models.
@@ -1013,9 +1013,9 @@ The BRFSS dataset contains encoded survey responses, redundant variables, and cl
 
 • Handling Class Imbalance
 •	Applied SMOTETomek on training data: 
-o	Balanced both classes: 
-  • Class 0: 288,268 
-  • Class 1: 288,268 
+ • Balanced both classes: 
+     • Class 0: 288,268 
+     • Class 1: 288,268 
 •	Improved model learning for minority class 
 
 • Model Development & Evaluation
