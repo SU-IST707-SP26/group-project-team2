@@ -975,24 +975,13 @@ Next Steps
 ●	Treat High_Cholesterol and High_BP with caution in pooled models
 
 
-**April 22nd 2026 - Data Preprocessing, Feature Engineering & Model Evaluation (Arakkal & Lulu)**
+**April 22nd 2026 - Feature Engineering & Model Evaluation (Arakkal & Lulu)**
 
 
 **Context:**
 The BRFSS dataset contains encoded survey responses, redundant variables, and class imbalance. To build an effective diabetes prediction model, it was necessary to clean the data, transform variables into meaningful formats, remove multicollinearity, and evaluate robust machine learning models.
 
  **Solution Implemented:**
- • Feature Selection & Data Preparation
- •	Selected relevant variables: 
-   	• Age, Sex, BMI, Physical Activity, Smoking, Alcohol, Education, Income, and Chronic Diseases 
-•	Removed irrelevant and redundant features to focus on meaningful predictors 
-
-• Variable Renaming & Transformation
-•	Renamed encoded variables into human-readable form (e.g., _BMI5 → BMI, _RFSMOK3 → Smoker) 
-•	Converted categorical codes into meaningful labels: 
-  • Income & Education → Ordered categories 
-  • Binary variables → Yes/No format 
-•	Ensured all categorical variables are interpretable and structured
 
 • Correlation Analysis & Feature Reduction
 •	Performed correlation analysis on numeric variables (BMI, Height, Weight) 
