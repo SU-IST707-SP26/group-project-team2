@@ -177,8 +177,7 @@
 
 ### ☐ M9.T2 — Class imbalance handling
 - **Quispe:** Analysis of target distribution imbalance  
-- **Quispe:** Implementation of class weighting strategy (`pos_weight`)  
-- **Quispe:** Setup of imbalance handling baseline for comparison  
+- **Quispe:** Setup of imbalance handling
 
 ### ☐ M9.T3 — Deep learning model development
 - **Quispe:** Design of feedforward neural network architecture (PyTorch)  
