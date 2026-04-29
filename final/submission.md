@@ -186,6 +186,7 @@ scaler.pkl : Feature scaling for consistent model input
 diabetes_dnn_a.pt : Trained PyTorch deep learning model for diabetes risk prediction
 These artifacts are used for real-time inference in the deployed Streamlit application, ensuring consistent preprocessing and model behavior between training and production.
 
+
 ### Streamlit Deployment
 The final model is deployed in a Streamlit application hosted in a separate repository:
 https://github.com/dlqui/app_risk
