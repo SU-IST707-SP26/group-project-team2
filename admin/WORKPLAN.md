@@ -165,11 +165,83 @@
 - Results & visualizations  
 - Editing, formatting, and reproducibility  
  
+## Milestone 9: Deep Learning Pipeline Development & Optimization (BRFSS Diabetes Prediction)
 
+**Goal:** Build a scalable deep learning pipeline for diabetes prediction using BRFSS survey data with proper preprocessing and imbalance handling.
+
+### ☐ M9.T1 — Data preprocessing & feature engineering
+- **Quispe:** BRFSS dataset loading, cleaning, and feature selection  
+- **Quispe:** Missing value handling (median imputation, target filtering)  
+- **Quispe:** Feature scaling, clipping, and transformation (StandardScaler, log transform)  
+- **Quispe:** Train-test split with stratification  
+
+### ☐ M9.T2 — Class imbalance handling
+- **Quispe:** Analysis of target distribution imbalance  
+- **Quispe:** Implementation of class weighting strategy (`pos_weight`)  
+- **Quispe:** Setup of imbalance handling baseline for comparison  
+
+### ☐ M9.T3 — Deep learning model development
+- **Quispe:** Design of feedforward neural network architecture (PyTorch)  
+- **Quispe:** Implementation of activation functions and dropout layers  
+- **Quispe:** Construction of binary classification output layer  
+
+### ☐ M9.T4 — Model training pipeline
+- **Quispe:** Training loop implementation using PyTorch  
+- **Quispe:** Loss function and optimizer configuration (Adam)  
+- **Quispe:** Batch training using DataLoader  
+
+### ☐ M9.T5 — Training optimization setup
+- **Quispe:** DataLoader and batch size optimization  
+
+
+---
+
+## Milestone 10: Classical Machine Learning Benchmarking & Comparative Analysis
+
+**Goal:** Build classical ML models to benchmark performance against deep learning approaches for presentation.
+
+
+### ☐ M10.T1 — Model comparison framework
+- **Quispe:** Benchmarking framework for ML vs DL models  
+- **Quispe:** Metric standardization across all models  
+- **Quispe:** Structured comparison pipeline setup  
+
+
+---
+
+## Milestone 11: Deep Learning Extension — Type-Specific Diabetes Classification (After recommendation of Professor)
+
+**Goal:** Evaluate whether BRFSS features can distinguish between Type 1 and Type 2 diabetes using deep learning models.
+
+### ☐ M11.T1 — Dataset restructuring
+- **Quispe:** Conversion of dataset into Type 1 vs rest classification  
+- **Quispe:** Conversion of dataset into Type 2 vs rest classification  
+- **Quispe:** Feature encoding and scaling  
+
+### ☐ M11.T2 — Model development
+- **Quispe:** Design of identical neural network architectures for both tasks  
+- **Quispe:** Implementation of dropout regularization  
+- **Quispe:** Binary classification output configuration  
+
+### ☐ M11.T3 — Training pipeline
+- **Quispe:** Training setup using weighted loss functions  
+- **Quispe:** DataLoader configuration for balanced training  
+- **Quispe:** Standardized training loop for both models  
+
+### ☐ M11.T4 — Evaluation setup
+- **Quispe:** Model evaluation pipeline for Type 1 vs Type 2 comparison  
+- **Quispe:** Metric consistency across both classification tasks  
+- **Quispe:** Reproducible evaluation framework  
+
+### ☐ M11.T5 — Comparative analysis framework
+- **Quispe:** Comparison of Type 1 vs Type 2 model behavior  
+- **Quispe:** Feature effectiveness analysis across tasks  
+- **Quispe:** Documentation of dataset limitations for subtype prediction  
 ---
 
 
 ## Changelog
+- 2026-04-29 - Updated Milestones
 - 2026-04-01 - Updated for final presentation
 - 2026-02-01 — Created initial WORKPLAN for BRFSS obesity prediction project  
 - 2026-02-15 — Updated scope to focus on actionable, interpretable predictors; assigned specific tasks for three team members in Milestones 1 & 2
