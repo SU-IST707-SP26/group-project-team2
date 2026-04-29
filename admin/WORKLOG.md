@@ -589,7 +589,7 @@ Best validation F1 score ≈ **0.432**
 
 
 
-**2026-04-22 - Milestone: Data Cleaning, Feature Engineering, and Diabetes Risk Modeling & Comparative Evaluation (Quispe)**
+**2026-04-22 - Milestone 10: Data Cleaning, Feature Engineering, and Diabetes Risk Modeling & Comparative Evaluation (Quispe)**
 
 ---
 
@@ -709,6 +709,30 @@ Multiple models were trained using standardized features and evaluated using F1-
 ## **Next Steps:**
 
 * Explore calibration methods to improve probability reliability.
+
+
+
+### 2026-04-28 – Milestone 11: Dual Deep Learning Models for Type-Specific Diabetes Classification Using BRFSS Data (Quispe)
+
+**Context:**
+
+Built two independent deep learning classifiers using BRFSS health survey data to evaluate whether demographic and lifestyle variables can distinguish between Type 1 and Type 2 diabetes cases.
+
+**Solution Implemented:**
+
+- Cleaned and preprocessed BRFSS dataset by handling missing values and encoding categorical variables into numeric form  
+- Standardized all features using StandardScaler to ensure stable neural network training  
+- Split dataset into training and testing sets for unbiased evaluation  
+- Created two separate binary classification datasets:  
+  - Type 1 diabetes vs all other cases  
+  - Type 2 diabetes vs all other cases  
+- Trained two independent feedforward neural network models with dropout regularization  
+- Used weighted binary cross-entropy loss to address class imbalance (no SMOTE applied)  
+- Ensured identical architecture and training pipeline for fair comparison between both models  
+
+**Impact:**
+
+Both models were successfully trained and evaluated under the same conditions. Results showed moderate predictive performance, with Type 2 classification performing better overall than Type 1. However, both models were affected by class imbalance and limited separability of diabetes types using standard BRFSS features.
 
 
 
