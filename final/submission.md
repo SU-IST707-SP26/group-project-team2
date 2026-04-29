@@ -88,16 +88,16 @@ Features include:
 This section maps each notebook to its role in the project pipeline.
 ## Supporting Notebooks Index
 
-- M_1_Quispe.ipynb — Initial data acquisition and variable mapping from BRFSS 2024. Identification of predictors and target definition.  
-- M_2_Quispe.ipynb — Data cleaning, encoding, scaling, and preprocessing pipeline.  
-- M_3_Quispe.ipynb — Exploratory Data Analysis (EDA), PCA, correlation analysis, clustering.  
-- Milestone_4_5_18_March.ipynb — KNN baseline model with PCA features and initial evaluation.  
-- Milestone_4_5_March_25.ipynb — SMOTE + XGBoost ensemble modeling and imbalance handling.  
-- Milestone7_2_Quispe.ipynb — XGBoost + Optuna hyperparameter tuning.  
-- Milestone_8_Quispe.ipynb — PyTorch deep learning baseline model.  
-- Milestone_9_Quispe.ipynb / Milestone_9_2_Quispe.ipynb— Improved deep learning pipeline with feature engineering.  
-- Milestone_9_3_Quispe.ipynb — Optuna-tuned deep learning model with SMOTE, all models implementation.  
-- Milestone_10_Quispe.ipynb — Type 1 vs Type 2 diabetes classification experiments.  
+- M_1_Quispe.ipynb - Initial data acquisition and variable mapping from BRFSS 2024. Identification of predictors and target definition.  
+- M_2_Quispe.ipynb - Data cleaning, encoding, scaling, and preprocessing pipeline.  
+- M_3_Quispe.ipynb - Exploratory Data Analysis (EDA), PCA, correlation analysis, clustering.  
+- Milestone_4_5_18_March.ipynb - KNN baseline model with PCA features and initial evaluation.  
+- Milestone_4_5_March_25.ipynb - SMOTE + XGBoost ensemble modeling and imbalance handling.  
+- Milestone7_2_Quispe.ipynb - XGBoost + Optuna hyperparameter tuning.  
+- Milestone_8_Quispe.ipynb - PyTorch deep learning baseline model.  
+- Milestone_9_Quispe.ipynb / Milestone_9_2_Quispe.ipynb- Improved deep learning pipeline with feature engineering.  
+- Milestone_9_3_Quispe.ipynb - Optuna-tuned deep learning model with SMOTE, all models implementation.  
+- Milestone_10_Quispe.ipynb - Type 1 vs Type 2 diabetes classification experiments.  
 
 ---
 
@@ -154,15 +154,11 @@ In addition, we explored **type-specific diabetes models (Type 1 and Type 2)** t
 ## References
 
 1. https://pmc.ncbi.nlm.nih.gov/articles/PMC12508184/  
-2. https://www.cdc.gov/brfss/index.html  
-3. https://www.sciencedirect.com/science/article/abs/pii/S1386505625000218  
-4. https://pmc.ncbi.nlm.nih.gov/articles/PMC12308079/  
-5. https://www.nature.com/articles/s41598-025-20505-9  
-6. https://www.frontiersin.org/journals/big-data/articles/10.3389/fdata.2024.1469981/full  
-7. https://www.nmcd-journal.com/article/S0939-4753(24)00204-7/abstract  
-8. https://pytorch.org/docs/stable/index.html  
-9. https://arxiv.org/abs/1106.1813  
-10. https://arxiv.org/abs/1603.02754  
+2. https://www.cdc.gov/brfss/index.html    
+3. https://pmc.ncbi.nlm.nih.gov/articles/PMC12308079/  
+4. https://www.nature.com/articles/s41598-025-20505-9  
+5. https://www.nmcd-journal.com/article/S0939-4753(24)00204-7/abstract  
+
 
 ---
 
