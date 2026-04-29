@@ -193,36 +193,24 @@
 - **Quispe:** DataLoader and batch size optimization  
 
 
----
-
-## Milestone 10: Classical Machine Learning Benchmarking & Comparative Analysis
-
-**Goal:** Build classical ML models to benchmark performance against deep learning approaches for presentation.
-
-
-### ☐ M10.T1 — Model comparison framework
-- **Quispe:** Benchmarking framework for ML vs DL models  
-- **Quispe:** Metric standardization across all models  
-- **Quispe:** Structured comparison pipeline setup  
-
 
 ---
 
-## Milestone 11: Deep Learning Extension — Type-Specific Diabetes Classification (After recommendation of Professor)
+## Milestone 10: Deep Learning Extension — Type-Specific Diabetes Classification (After recommendation of Professor)
 
 **Goal:** Evaluate whether BRFSS features can distinguish between Type 1 and Type 2 diabetes using deep learning models.
 
-### ☐ M11.T1 — Dataset restructuring
+### ☐ M10.T1 — Dataset restructuring
 - **Quispe:** Conversion of dataset into Type 1 vs rest classification  
 - **Quispe:** Conversion of dataset into Type 2 vs rest classification  
 - **Quispe:** Feature encoding and scaling  
 
-### ☐ M11.T2 — Model development
+### ☐ M10.T2 — Model development
 - **Quispe:** Design of identical neural network architectures for both tasks  
 - **Quispe:** Implementation of dropout regularization  
 - **Quispe:** Binary classification output configuration  
 
-### ☐ M11.T3 — Training pipeline
+### ☐ M10.T3 — Training pipeline
 - **Quispe:** Training setup using weighted loss functions  
 - **Quispe:** DataLoader configuration for balanced training  
 - **Quispe:** Standardized training loop for both models  
@@ -232,7 +220,7 @@
 - **Quispe:** Metric consistency across both classification tasks  
 - **Quispe:** Reproducible evaluation framework  
 
-### ☐ M11.T5 — Comparative analysis framework
+### ☐ M10.T5 — Comparative analysis framework
 - **Quispe:** Comparison of Type 1 vs Type 2 model behavior  
 - **Quispe:** Feature effectiveness analysis across tasks  
 - **Quispe:** Documentation of dataset limitations for subtype prediction  
