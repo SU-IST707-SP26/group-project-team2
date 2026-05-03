@@ -5,8 +5,8 @@
 ## Team
 
 - Quispe (GitHub: dlqui)  
-- [Full Name] (GitHub: username)  
-- [Full Name] (GitHub: username)  
+- Arakkal (GitHub: AkhilHaris111)  
+- Massasi (GitHub: lr-2026)  
 
 ---
 
@@ -60,6 +60,8 @@ Features include:
 - Categorical encoding  
 - Outlier clipping / log transforms  
 - Stratified train-test split  
+- Mean Imputation
+- Correlation Analysis
 
 #### Imbalance Handling
 - SMOTE  
@@ -98,6 +100,7 @@ This section maps each notebook to its role in the project pipeline.
 - Milestone_9_Quispe.ipynb / Milestone_9_2_Quispe.ipynb- Improved deep learning pipeline with feature engineering.  
 - Milestone_9_3_Quispe.ipynb - Optuna-tuned deep learning model with SMOTE, all models implementation.  
 - Milestone_10_Quispe.ipynb - Type 1 vs Type 2 diabetes classification experiments.  
+- Modelling_2024r.ipnyb - Combined file of Arakkal and Lulu which includes data encoding, preprocessing and modeling.
 
 ---
 
@@ -113,12 +116,20 @@ This section maps each notebook to its role in the project pipeline.
 - F1-score: ~0.44–0.60  
 - Strong ranking, weaker classification precision  
 
+### Models (Arakkal & Lulu)
+- Random Forest: AUC ~0.87
+- XGBoost(Base): AUC ~0.90
+- XGBoost(Tuned): AUC ~0.87
+
 ### Key Findings
 - Class imbalance strongly affects performance  
 - Recall > precision across all models  
 - XGBoost is most stable classical model  
 - Deep learning does not outperform XGBoost on tabular data  
-
+- Arakkal & Lulu: Class imbalance significantly impacts all models, with recall consistently outperforming precision across Random Forest, XGBoost Base, and XGBoost Tuned
+- Arakkal & Lulu: XGBoost Base is the strongest performer, achieving the highest ROC-AUC (0.90) 
+- Arakkal & Lulu: Hyperparameter tuning did not meaningfully improve XGBoost, suggesting the base model was already near-optimal for this dataset
+- Arakkal & Lulu: All models show competitive ROC-AUC scores (0.87–0.90), confirming that BRFSS survey data carries strong predictive signal for diabetes risk
 ---
 
 ## Discussion
@@ -137,7 +148,9 @@ In addition, we explored **type-specific diabetes models (Type 1 and Type 2)** t
 - Limited clinical detail in BRFSS  
 - Weak feature separability  
 - SMOTE does not consistently improve results  
-- Deep learning offers limited gains over XGBoost  
+- Deep learning offers limited gains over XGBoost 
+- Hyperparameter tuning of XGBoost did not yield meaningful improvements over the base model
+ 
 
 ---
 
